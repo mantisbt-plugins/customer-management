@@ -66,5 +66,30 @@ class CustomerManagementPlugin extends MantisPlugin {
 				)
 		);
 	}
+	
+
+	function config() {
+		return array(
+				"manage_customers_threshold" => ADMINISTRATOR
+		);
+	}
+
+	function hooks() {
+		return array(
+				"EVENT_MENU_MANAGE" => "menu_manage"
+		);
+	}
+	
+	function init() {
+		require_once 'api/CustomerManagementDao.php';
+	}
+	
+	public function menu_manage($event, $user_id) {
+		if (access_has_global_level(plugin_config_get("manage_customers_threshold"))) {
+			$page = plugin_page("manage_customers");
+			$label = plugin_lang_get("manage_customers");
+			return '<a href="' . string_html_specialchars( $page ) . '">' . $label . '</a>';
+		}
+	}	
 }
 
