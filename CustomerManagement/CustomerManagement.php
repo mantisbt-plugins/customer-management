@@ -21,7 +21,7 @@ class CustomerManagementPlugin extends MantisPlugin {
 		$this->name = 'Customer Management';
 		$this->description = 'Allows customers to be defined and notified about issues opened on their behalf.';
 
-		$this->version = '1.1.0';
+		$this->version = '1.0.0';
 		$this->requires = array(
 			'MantisCore' => '1.2.0',
 		);
@@ -29,6 +29,42 @@ class CustomerManagementPlugin extends MantisPlugin {
 		$this->author	= 'Robert Munteanu';
 		$this->contact	= 'robert@lmn.ro';
 		$this->url		= 'http://github.com/mantisbt-plugins/customer-management';
+	}
+	
+	function schema() {
+		
+		$t_customer_service_table = plugin_table("customer_service");
+		$t_customer_table = plugin_table("customer");
+		
+		return array(
+				// version 1.0.0
+				array("CreateTableSQL", array(plugin_table("group"), "
+					id I NOTNULL UNSIGNED AUTOINCREMENT PRIMARY,
+					name C(128) NOTNULL
+				")),
+				array("CreateTableSQL", array(plugin_table("service"), "
+					id I NOTNULL UNSIGNED AUTOINCREMENT PRIMARY,
+					name C(128) NOTNULL
+				")),
+				array("CreateTableSQL", array(plugin_table("customer"), "
+					id I NOTNULL UNSIGNED AUTOINCREMENT PRIMARY,
+					customer_group_id I NOTNULL UNSIGNED,
+					name C(128) NOTNULL
+				")),
+				array("CreateTableSQL", array(plugin_table("customers_to_services"), "
+					customer_id I NOTNULL UNSIGNED,
+					service_id I NOTNULL UNSIGNED
+				")),
+				array("CreateIndexSQL",
+						array("idx_cust_to_group",plugin_table("customer"),"customer_group_id")
+				),
+				array("CreateIndexSQL",
+						array("idx_c2s_to_cust",plugin_table("customers_to_services"), "customer_id")
+				),
+				array("CreateIndexSQL",
+						array("idx_c2s_to_service",plugin_table("customers_to_services"), "service_id")
+				)
+		);
 	}
 }
 
