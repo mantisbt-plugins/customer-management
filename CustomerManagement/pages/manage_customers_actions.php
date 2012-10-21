@@ -20,7 +20,7 @@ switch ( $_POST['action'] ) {
 		break;
 	case 'saveCustomer':
 		CustomerManagementDao::saveCustomer(gpc_get_int('id', null), gpc_get_string('name'), 
-			gpc_get_int('customer_group_id'), gpc_get_int_array('service_id'), array());
+			gpc_get_int('customer_group_id'), gpc_get_int_array('service_id', array()));
 		break;
 }
 ?>
