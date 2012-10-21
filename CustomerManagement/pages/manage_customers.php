@@ -29,20 +29,29 @@ html_page_top( plugin_lang_get( 'manage_customers' ) );
 </table>
 <script type="text/javascript" src="<?php echo plugin_file('customer-management.js'); ?>"></script>
 <script>
-	jQuery('.customer-group-delete').click(function() {
+jQuery(document).ready(function($) {
 
-		if ( jQuery(this).data('customerCount') > 0 ) {
-			window.alert('Unable to delete group since at least one customer is linked to it.');
+	var api = new CustomerManagement({
+		'entryPoint' : '<?php echo plugin_page('manage_customers_actions') ; ?>',
+		'csrfToken' : '<?php echo form_security_token('manage_customers') ; ?>'
+	});
+	var ui = CustomerManagementUi;
+	
+	$('.customer-group-delete').click(function() {
+
+		if ( $(this).data('customerCount') > 0 ) {
+			ui.error("<?php echo plugin_lang_get('unable_to_delete_group_has_customers'); ?>");
 			return;
 		}
 		
-		if ( !window.confirm("Are you sure you want to delete this customer group?") ) 
+		if ( !ui.confirm("Are you sure you want to delete this customer group?") ) 
 			return;
 		
-		CustomerManagement.deleteCustomerGroup(jQuery(this).data('group-id'), function() {
+		api.deleteCustomerGroup($(this).data('group-id'), function() {
 			window.location.reload();
 		});
 	});
+  });
 </script>
 <?php 
 html_page_bottom();

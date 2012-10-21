@@ -18,3 +18,5 @@
 $s_plugin_CustomerManagement_manage_customers = 'Manage Customers';
 $s_plugin_CustomerManagement_edit = 'Edit';
 $s_plugin_CustomerManagement_delete = 'Delete';
+$s_plugin_CustomerManagement_unable_to_delete_group_has_customers = 'Unable to delete group since at least one customer is linked to it.';
+$s_plugin_CustomerManagement_confirm_delete_group = 'Unable to delete group since at least one customer is linked to it.';

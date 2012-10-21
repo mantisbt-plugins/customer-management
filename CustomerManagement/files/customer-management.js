@@ -1,6 +1,20 @@
-var CustomerManagement = { };
-CustomerManagement.deleteCustomerGroup = function(customerGroupId, success) {
-	jQuery.post('plugin.php?page=CustomerManagement/manage_customers_actions',
-		{'action': 'deleteGroup', 'customerGroupId': customerGroupId}
+var CustomerManagement = function(options) {
+	this.entryPoint = options.entryPoint;
+	this.csrfToken = options.csrfToken;
+};
+
+CustomerManagement.prototype.deleteCustomerGroup = function(customerGroupId, success) {
+	jQuery.post(this.entryPoint,
+		{'action': 'deleteGroup', 'crsfToken' : this.csrfToken, 'customerGroupId': customerGroupId}
 	).done(success.call());
+}
+
+var CustomerManagementUi = {};
+
+CustomerManagementUi.confirm = function(message) {
+	return window.confirm(message);
+}
+
+CustomerManagementUi.error = function(message) {
+	window.alert(error);
 }
