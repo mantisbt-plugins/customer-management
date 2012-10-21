@@ -4,7 +4,6 @@ require_once( 'core.php' );
 access_ensure_global_level( plugin_config_get( 'manage_customers_threshold' ) );
 
 html_page_top( plugin_lang_get( 'manage_customers' ) );
-
 ?>
 <h1><?php echo plugin_lang_get( 'manage_customers' ) ?></h1>
 <table class="width50">
@@ -26,11 +25,11 @@ html_page_top( plugin_lang_get( 'manage_customers' ) );
 			</tr>
 		<?php } ?>
 		<tr <?php echo helper_alternate_class() ?>>
-			<td colspan="2"><a href="#" class="customer-group-edit">Add new group</a></td>
+			<td colspan="2"><a href="#" class="customer-group-edit"><?php echo plugin_lang_get('add_new_group'); ?></a></td>
 		</tr>
 	</tbody>
 </table>
-<form id="group-form" style="display: none" title="Group editing">
+<form id="group-form" style="display: none" title="<?php echo plugin_lang_get('edit_group'); ?>">
 	<input type="hidden" name="id" />
 	<label for="name">Name</label> <input type="text" name="name"/> <br />
 </form>
@@ -50,11 +49,11 @@ jQuery(document).ready(function($) {
 			ui.error("<?php echo plugin_lang_get('unable_to_delete_group_has_customers'); ?>");
 			return;
 		}
-		
-		if ( !ui.confirm("Are you sure you want to delete this customer group?") ) 
+
+		if ( !ui.confirm("<?php echo plugin_lang_get('confirm_delete_group'); ?>") )
 			return;
-		
-		api.deleteCustomerGroup($(this).data('group-id'), function() {
+
+		api.deleteGroup($(this).data('group-id'), function() {
 			window.location.reload();
 		});
 	});
@@ -71,12 +70,12 @@ jQuery(document).ready(function($) {
 		form.dialog({
 			'modal' : true,
 			buttons: {
-				'Save' : function() {
-					api.saveCustomerGroup(form.serializeObject(), function() {
+				'<?php echo plugin_lang_get('save'); ?>' : function() {
+					api.saveGroup(form.serializeObject(), function() {
 						window.location.reload();
 					});
 				},
-				'Cancel' : function() {
+				'<?php echo plugin_lang_get('cancel'); ?>' : function() {
 					$(this).dialog('close');
 					form.get(0).reset();
 				}

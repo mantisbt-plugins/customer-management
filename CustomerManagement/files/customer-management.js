@@ -21,13 +21,13 @@ var CustomerManagement = function(options) {
 	this.csrfToken = options.csrfToken;
 };
 
-CustomerManagement.prototype.deleteCustomerGroup = function(customerGroupId, success) {
+CustomerManagement.prototype.deleteGroup = function(customerGroupId, success) {
 	jQuery.post(this.entryPoint,
 		{'action': 'deleteGroup', 'manage_customers_token' : this.csrfToken, 'customerGroupId': customerGroupId}
 	).done(success.call());
 }
 
-CustomerManagement.prototype.saveCustomerGroup = function(data, success) {
+CustomerManagement.prototype.saveGroup = function(data, success) {
 	
 	var payload = {'action': 'saveGroup', 'manage_customers_token' : this.csrfToken };
 
