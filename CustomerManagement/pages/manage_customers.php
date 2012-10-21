@@ -11,9 +11,9 @@ print_manage_menu( plugin_page('manage_customers') );
 
 <div id="tabs">
 	<ul>
+		<li><a href="#customers"><?php echo plugin_lang_get( 'customers') ?></a></li>	
 		<li><a href="#groups"><?php echo plugin_lang_get( 'customer_groups') ?></a></li>
 		<li><a href="#services"><?php echo plugin_lang_get( 'services') ?></a></li>
-		<li><a href="#customers"><?php echo plugin_lang_get( 'customers') ?></a></li>
 	</ul>
 	<div id="groups">
 		<table class="width50">
