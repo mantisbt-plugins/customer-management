@@ -3,7 +3,13 @@
 class CustomerManagementDao {
 	
 	static function findAllGroups() {
-		return self::toArray(db_query_bound('SELECT * FROM ' . plugin_table('group' ) . ' ORDER BY name'));
+		return self::toArray(db_query_bound('
+				SELECT g.*, COUNT(c.id) as customerCount FROM ' . plugin_table('group' ) . ' g
+				LEFT JOIN ' . plugin_table('customer') . ' c
+				ON g.id = c.customer_group_id
+				GROUP BY g.id
+				ORDER BY g.name')
+		);
 	}
 	
 	private static function toArray( $p_db_result ) {
@@ -27,5 +33,9 @@ class CustomerManagementDao {
 	static function findAllServices() {
 		
 		return db_query_bound('SELECT * FROM ' . plugin_table('service') . ' ORDER BY name');
+	}
+	
+	static function deleteGroup( $groupId ) {
+		return db_query_bound('DELETE FROM ' . plugin_table('group') . ' WHERE id = ? ', array ( $groupId ));
 	}
 }
