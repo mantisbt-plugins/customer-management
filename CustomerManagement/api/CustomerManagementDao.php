@@ -80,4 +80,19 @@ class CustomerManagementDao {
 		else
 			db_query_bound('UPDATE ' . plugin_table('service') . ' SET name = ? WHERE id = ? ', array($name, $id));
 	}
+
+	static function saveCustomer( $id, $name, $customerGroupId, $serviceIds ) {
+		if ( $id == null ) {
+			db_query_bound('INSERT INTO ' . plugin_table('customer') . ' (name, customer_group_id) VALUES (?, ?)', array($name, $customerGroupId) );
+			$id = db_insert_id( plugin_table('customer'));
+		} else {
+			db_query_bound('UPDATE ' . plugin_table('customer') . ' SET name = ?, customer_group_id = ? WHERE id = ? ', array($name, $customerGroupId, $id));
+			db_query_bound('DELETE FROM ' . plugin_table('customers_to_services') . ' WHERE customer_id = ?', array( $id ) );
+		}
+		
+		foreach ( $serviceIds as $serviceId )
+			db_query_bound('
+				INSERT INTO ' . plugin_table('customers_to_services') . ' (customer_id, service_id) 
+				VALUES (?,?)', array($id, $serviceId));
+	}
 }

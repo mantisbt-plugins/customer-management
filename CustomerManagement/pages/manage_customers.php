@@ -132,7 +132,7 @@ print_manage_menu( plugin_page('manage_customers') );
 		<option value="<?php echo $group['id']; ?>"><?php echo $group['name']?></option>
 	<?php } ?>
 	</select> <br />
-	<label for="services">Services</label> <select name="services" multiple="multiple">
+	<label for="service_id[]">Services</label> <select name="service_id[]" multiple="multiple">
 	<?php foreach ( CustomerManagementDao::findAllServices() as $service ) { ?>
 		<option value="<?php echo $service['id']; ?>"><?php echo $service['name']?></option>
 	<?php } ?>	

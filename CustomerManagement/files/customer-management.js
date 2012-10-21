@@ -49,6 +49,16 @@ CustomerManagement.prototype.saveService = function(data, success) {
 		.done(success.call());
 }
 
+CustomerManagement.prototype.saveCustomer = function(data, success) {
+	if ( !data['service_id[]'] )
+		data['service_id[]'] = [];
+	
+	var payload = {'action': 'saveCustomer', 'manage_customers_token' : this.csrfToken };
+	
+	jQuery.post(this.entryPoint, jQuery.extend(payload, data) )
+	.done(success.call());
+}
+
 var CustomerManagementUi = {};
 
 CustomerManagementUi.confirm = function(message) {
