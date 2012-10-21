@@ -38,4 +38,11 @@ class CustomerManagementDao {
 	static function deleteGroup( $groupId ) {
 		return db_query_bound('DELETE FROM ' . plugin_table('group') . ' WHERE id = ? ', array ( $groupId ));
 	}
+	
+	static function saveGroup( $id, $name ) {
+		if ( $id == null )
+			db_query_bound('INSERT INTO ' . plugin_table('group') . '(name) VALUES (?)', array($name) );
+		else
+			db_query_bound('UPDATE ' . plugin_table('group') . ' SET name = ? WHERE id = ? ', array($name, $id));
+	}
 }

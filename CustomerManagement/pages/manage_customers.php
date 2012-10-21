@@ -21,12 +21,19 @@ html_page_top( plugin_lang_get( 'manage_customers' ) );
 				<td>
 					<a class="customer-group-delete" href="#" data-customer-count="<?php echo $group['customerCount'] ?>"
 						data-group-id="<?php echo $group['id']?>"><?php echo plugin_lang_get( 'delete' ) ?></a>
-					<a class="customer-group-edit" href="#" data-group-id="<?php echo $group['id'] ?>"><?php echo plugin_lang_get( 'edit' ) ?></a>
+					<a class="customer-group-edit" href="#" data-group-id="<?php echo $group['id'] ?>" data-group-name="<?php echo $group['name'] ?>"><?php echo plugin_lang_get( 'edit' ) ?></a>
 				</td>
 			</tr>
 		<?php } ?>
+		<tr <?php echo helper_alternate_class() ?>>
+			<td colspan="2"><a href="#" class="customer-group-edit">Add new group</a></td>
+		</tr>
 	</tbody>
 </table>
+<form id="group-form" style="display: none" title="Group editing">
+	<input type="hidden" name="id" />
+	<label for="name">Name</label> <input type="text" name="name"/> <br />
+</form>
 <script type="text/javascript" src="<?php echo plugin_file('customer-management.js'); ?>"></script>
 <script>
 jQuery(document).ready(function($) {
@@ -49,6 +56,31 @@ jQuery(document).ready(function($) {
 		
 		api.deleteCustomerGroup($(this).data('group-id'), function() {
 			window.location.reload();
+		});
+	});
+
+	$('.customer-group-edit').click(function() {
+
+		var id = $(this).data('group-id');
+		var name = $(this).data('group-name');
+
+		var form = $('#group-form');
+		form.find('input[name=id]').val(id);
+		form.find('input[name=name]').val(name);
+		
+		form.dialog({
+			'modal' : true,
+			buttons: {
+				'Save' : function() {
+					api.saveCustomerGroup(form.serializeObject(), function() {
+						window.location.reload();
+					});
+				},
+				'Cancel' : function() {
+					$(this).dialog('close');
+					form.get(0).reset();
+				}
+			}
 		});
 	});
   });
