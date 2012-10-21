@@ -9,6 +9,9 @@ switch ( $_POST['action'] ) {
 	case 'deleteService':
 		CustomerManagementDao::deleteService(gpc_get_int('serviceId'));
 		break;
+	case 'deleteCustomer':
+		CustomerManagementDao::deleteCustomer(gpc_get_int('customerId'));
+		break;
 	case 'saveGroup':
 		CustomerManagementDao::saveGroup(gpc_get_int('id', null), gpc_get_string('name'));
 		break;

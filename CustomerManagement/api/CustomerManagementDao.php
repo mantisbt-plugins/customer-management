@@ -67,6 +67,15 @@ class CustomerManagementDao {
 		return db_query_bound('DELETE FROM ' . plugin_table('service') . ' WHERE id = ? ', array ( $serviceId ));
 	}
 	
+	static function deleteCustomer( $customerId ) {
+		self::deleteCustomersToServices( $customerId );
+		return db_query_bound('DELETE FROM ' . plugin_table('customer') . ' WHERE id = ? ', array ( $customerId ));
+	}
+
+	private static function deleteCustomersToServices( $customerId ) {
+		db_query_bound('DELETE FROM ' . plugin_table('customers_to_services') . ' WHERE customer_id = ?', array( $customerId ) );
+	}
+	
 	static function saveGroup( $id, $name ) {
 		if ( $id == null )
 			db_query_bound('INSERT INTO ' . plugin_table('group') . '(name) VALUES (?)', array($name) );
@@ -87,7 +96,7 @@ class CustomerManagementDao {
 			$id = db_insert_id( plugin_table('customer'));
 		} else {
 			db_query_bound('UPDATE ' . plugin_table('customer') . ' SET name = ?, customer_group_id = ? WHERE id = ? ', array($name, $customerGroupId, $id));
-			db_query_bound('DELETE FROM ' . plugin_table('customers_to_services') . ' WHERE customer_id = ?', array( $id ) );
+			self::deleteCustomersToServices( $id );			
 		}
 		
 		foreach ( $serviceIds as $serviceId )

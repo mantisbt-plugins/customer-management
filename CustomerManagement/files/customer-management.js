@@ -33,6 +33,12 @@ CustomerManagement.prototype.deleteService = function(serviceId, success) {
 	).done(success.call());
 }
 
+CustomerManagement.prototype.deleteCustomer = function(customerId, success) {
+	jQuery.post(this.entryPoint,
+			{'action': 'deleteCustomer', 'manage_customers_token' : this.csrfToken, 'customerId': customerId}
+	).done(success.call());
+}
+
 CustomerManagement.prototype.saveGroup = function(data, success) {
 	
 	var payload = {'action': 'saveGroup', 'manage_customers_token' : this.csrfToken };
