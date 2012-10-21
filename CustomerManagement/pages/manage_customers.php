@@ -67,7 +67,7 @@ print_manage_menu( plugin_page('manage_customers') );
 						<td>
 							<a class="service-delete" href="#" data-customer-count="<?php echo $service['customerCount'] ?>"
 								data-service-id="<?php echo $service['id']?>"><?php echo plugin_lang_get( 'delete' ) ?></a>
-							<a class="service-edit" href="#" data-group-id="<?php echo $service['id'] ?>" data-service-name="<?php echo $service['name'] ?>"><?php echo plugin_lang_get( 'edit' ) ?></a>
+							<a class="service-edit" href="#" data-service-id="<?php echo $service['id'] ?>" data-service-name="<?php echo $service['name'] ?>"><?php echo plugin_lang_get( 'edit' ) ?></a>
 						</td>
 					</tr>
 				<?php } ?>
