@@ -24,3 +24,4 @@ $s_plugin_CustomerManagement_add_new_group = 'Add new group';
 $s_plugin_CustomerManagement_save  = 'Save';
 $s_plugin_CustomerManagement_cancel = 'Cancel';
 $s_plugin_CustomerManagement_edit_group = 'Edit Group';
+$s_plugin_CustomerManagement_customer_groups = 'Customer groups';
