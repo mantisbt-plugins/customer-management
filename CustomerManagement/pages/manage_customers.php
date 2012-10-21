@@ -94,15 +94,19 @@ print_manage_menu( plugin_page('manage_customers') );
 						<td><?php echo $customer['groupName']?></td>
 						<td><?php 
 							$serviceNames = array();
-							foreach ( $customer['services'] as $service )
+							$serviceIds = array();
+							foreach ( $customer['services'] as $service ) {
 								$serviceNames[] = $service['name'];
+								$serviceIds[] = $service['id'];
+							}
 							
 							echo implode(',', $serviceNames);
 							?>
 						</td>
 						<td>
 							<a class="customer-delete" href="#" data-customer-id="<?php echo $customer['id']?>"><?php echo plugin_lang_get( 'delete' ) ?></a>
-							<a class="customer-edit" href="#" data-customer-id="<?php echo $customer['id'] ?>" data-customer-name="<?php echo $customer['name'] ?>"><?php echo plugin_lang_get( 'edit' ) ?></a>
+							<a class="customer-edit" href="#" data-customer-id="<?php echo $customer['id'] ?>" data-customer-name="<?php echo $customer['name'] ?>"
+								data-group-id="<?php echo $customer['customer_group_id']; ?>" data-service-id="[<?php echo implode(",", $serviceIds); ?>]"><?php echo plugin_lang_get( 'edit' ) ?></a>
 						</td>
 					</tr>
 				<?php } ?>
@@ -244,10 +248,14 @@ jQuery(document).ready(function($) {
 
 		var id = $(this).data('customer-id');
 		var name = $(this).data('customer-name');
+		var groupId = $(this).data('group-id');
+		var serviceId = $(this).data('service-id');
 
 		var form = $('#customer-form');
 		form.find('input[name=id]').val(id);
 		form.find('input[name=name]').val(name);
+		form.find('select[name=customer_group_id]').val(groupId);
+		form.find('select[name="service_id[]"]').val(serviceId);
 		
 		form.dialog({
 			'modal' : true,

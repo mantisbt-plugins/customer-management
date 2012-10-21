@@ -25,7 +25,7 @@ class CustomerManagementDao {
 	static function findAllCustomers() {
 
 		$customers = self::toArray(db_query_bound('
-				SELECT c.id, c.name, g.name AS groupName FROM ' . plugin_table('customer' ) . ' c 
+				SELECT c.*, g.name AS groupName FROM ' . plugin_table('customer' ) . ' c 
 				LEFT JOIN '. plugin_table('group') . ' g ON g.id = c.customer_group_id 
 				ORDER BY c.name'));
 		
