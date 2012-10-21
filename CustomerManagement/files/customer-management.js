@@ -27,10 +27,24 @@ CustomerManagement.prototype.deleteGroup = function(customerGroupId, success) {
 	).done(success.call());
 }
 
+CustomerManagement.prototype.deleteService = function(serviceId, success) {
+	jQuery.post(this.entryPoint,
+		{'action': 'deleteService', 'manage_customers_token' : this.csrfToken, 'serviceId': customerGroupId}
+	).done(success.call());
+}
+
 CustomerManagement.prototype.saveGroup = function(data, success) {
 	
 	var payload = {'action': 'saveGroup', 'manage_customers_token' : this.csrfToken };
 
+	jQuery.post(this.entryPoint, jQuery.extend(payload, data) )
+		.done(success.call());
+}
+
+CustomerManagement.prototype.saveService = function(data, success) {
+	
+	var payload = {'action': 'saveService', 'manage_customers_token' : this.csrfToken };
+	
 	jQuery.post(this.entryPoint, jQuery.extend(payload, data) )
 		.done(success.call());
 }

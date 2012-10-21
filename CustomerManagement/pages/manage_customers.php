@@ -12,6 +12,8 @@ print_manage_menu( plugin_page('manage_customers') );
 <div id="tabs">
 	<ul>
 		<li><a href="#groups"><?php echo plugin_lang_get( 'customer_groups') ?></a></li>
+		<li><a href="#services"><?php echo plugin_lang_get( 'services') ?></a></li>
+		<li><a href="#customers"><?php echo plugin_lang_get( 'customers') ?></a></li>
 	</ul>
 	<div id="groups">
 		<table class="width50">
@@ -38,8 +40,38 @@ print_manage_menu( plugin_page('manage_customers') );
 			</tbody>
 		</table>
 	</div>
+	<div id="services">
+		<table class="width50">
+			<thead>
+				<tr <?php echo helper_alternate_class() ?>>
+					<th>Name</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( CustomerManagementDao::findAllServices() as $service ) { ?>
+					<tr <?php echo helper_alternate_class() ?>>
+						<td><?php echo $service['name']?></td>
+						<td>
+							<a class="service-delete" href="#" data-customer-count="<?php echo $service['customerCount'] ?>"
+								data-service-id="<?php echo $service['id']?>"><?php echo plugin_lang_get( 'delete' ) ?></a>
+							<a class="service-edit" href="#" data-group-id="<?php echo $service['id'] ?>" data-service-name="<?php echo $service['name'] ?>"><?php echo plugin_lang_get( 'edit' ) ?></a>
+						</td>
+					</tr>
+				<?php } ?>
+				<tr <?php echo helper_alternate_class() ?>>
+					<td colspan="2"><a href="#" class="service-edit"><?php echo plugin_lang_get('add_new_service'); ?></a></td>
+				</tr>
+			</tbody>
+		</table>	
+	</div>
+	<div id="customers"/>
 </div>
 <form id="group-form" style="display: none" title="<?php echo plugin_lang_get('edit_group'); ?>">
+	<input type="hidden" name="id" />
+	<label for="name">Name</label> <input type="text" name="name"/> <br />
+</form>
+<form id="service-form" style="display: none" title="<?php echo plugin_lang_get('edit_service'); ?>">
 	<input type="hidden" name="id" />
 	<label for="name">Name</label> <input type="text" name="name"/> <br />
 </form>
@@ -70,6 +102,21 @@ jQuery(document).ready(function($) {
 		});
 	});
 
+	$('.service-delete').click(function() {
+
+		if ( $(this).data('customerCount') > 0 ) {
+			ui.error("<?php echo plugin_lang_get('unable_to_delete_service_has_customers'); ?>");
+			return;
+		}
+
+		if ( !ui.confirm("<?php echo plugin_lang_get('confirm_delete_service'); ?>") )
+			return;
+
+		api.deleteService($(this).data('group-id'), function() {
+			window.location.reload();
+		});
+	});
+	
 	$('.customer-group-edit').click(function() {
 
 		var id = $(this).data('group-id');
@@ -84,6 +131,31 @@ jQuery(document).ready(function($) {
 			buttons: {
 				'<?php echo plugin_lang_get('save'); ?>' : function() {
 					api.saveGroup(form.serializeObject(), function() {
+						window.location.reload();
+					});
+				},
+				'<?php echo plugin_lang_get('cancel'); ?>' : function() {
+					$(this).dialog('close');
+					form.get(0).reset();
+				}
+			}
+		});
+	});
+
+	$('.service-edit').click(function() {
+
+		var id = $(this).data('service-id');
+		var name = $(this).data('service-name');
+
+		var form = $('#service-form');
+		form.find('input[name=id]').val(id);
+		form.find('input[name=name]').val(name);
+		
+		form.dialog({
+			'modal' : true,
+			buttons: {
+				'<?php echo plugin_lang_get('save'); ?>' : function() {
+					api.saveService(form.serializeObject(), function() {
 						window.location.reload();
 					});
 				},

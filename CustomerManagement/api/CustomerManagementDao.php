@@ -31,12 +31,21 @@ class CustomerManagementDao {
 	}
 	
 	static function findAllServices() {
-		
-		return db_query_bound('SELECT * FROM ' . plugin_table('service') . ' ORDER BY name');
+		return self::toArray(db_query_bound('
+				SELECT s.*, COUNT(c2s.service_id) as customerCount FROM ' . plugin_table('service' ) . ' s
+				LEFT JOIN ' . plugin_table('customers_to_services') . ' c2s
+				ON s.id = c2s.service_id
+				GROUP BY s.id
+				ORDER BY s.name')
+		);
 	}
 	
 	static function deleteGroup( $groupId ) {
 		return db_query_bound('DELETE FROM ' . plugin_table('group') . ' WHERE id = ? ', array ( $groupId ));
+	}
+	
+	static function deleteService( $serviceId ) {
+		return db_query_bound('DELETE FROM ' . plugin_table('service') . ' WHERE id = ? ', array ( $serviceId ));
 	}
 	
 	static function saveGroup( $id, $name ) {
@@ -44,5 +53,12 @@ class CustomerManagementDao {
 			db_query_bound('INSERT INTO ' . plugin_table('group') . '(name) VALUES (?)', array($name) );
 		else
 			db_query_bound('UPDATE ' . plugin_table('group') . ' SET name = ? WHERE id = ? ', array($name, $id));
+	}
+
+	static function saveService( $id, $name ) {
+		if ( $id == null )
+			db_query_bound('INSERT INTO ' . plugin_table('service') . '(name) VALUES (?)', array($name) );
+		else
+			db_query_bound('UPDATE ' . plugin_table('service') . ' SET name = ? WHERE id = ? ', array($name, $id));
 	}
 }
