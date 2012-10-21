@@ -29,7 +29,7 @@ CustomerManagement.prototype.deleteGroup = function(customerGroupId, success) {
 
 CustomerManagement.prototype.deleteService = function(serviceId, success) {
 	jQuery.post(this.entryPoint,
-		{'action': 'deleteService', 'manage_customers_token' : this.csrfToken, 'serviceId': customerGroupId}
+		{'action': 'deleteService', 'manage_customers_token' : this.csrfToken, 'serviceId': serviceId}
 	).done(success.call());
 }
 

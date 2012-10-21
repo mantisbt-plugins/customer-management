@@ -175,7 +175,7 @@ jQuery(document).ready(function($) {
 		if ( !ui.confirm("<?php echo plugin_lang_get('confirm_delete_service'); ?>") )
 			return;
 
-		api.deleteService($(this).data('group-id'), function() {
+		api.deleteService($(this).data('service-id'), function() {
 			window.location.reload();
 		});
 	});

@@ -7,6 +7,7 @@ switch ( $_POST['action'] ) {
 		CustomerManagementDao::deleteGroup(gpc_get_int('customerGroupId'));
 		break;
 	case 'deleteService':
+		error_log("Trying to delete service");
 		CustomerManagementDao::deleteService(gpc_get_int('serviceId'));
 		break;
 	case 'deleteCustomer':
