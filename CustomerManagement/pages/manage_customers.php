@@ -65,7 +65,41 @@ print_manage_menu( plugin_page('manage_customers') );
 			</tbody>
 		</table>	
 	</div>
-	<div id="customers"/>
+	<div id="customers">
+		<table class="width50">
+			<thead>
+				<tr <?php echo helper_alternate_class() ?>>
+					<th>Name</th>
+					<th>Group</th>
+					<th>Services</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( CustomerManagementDao::findAllCustomers() as $customer ) { ?>
+					<tr <?php echo helper_alternate_class() ?>>
+						<td><?php echo $customer['name']?></td>
+						<td><?php echo $customer['groupName']?></td>
+						<td><?php 
+							$serviceNames = array();
+							foreach ( $customer['services'] as $service )
+								$serviceNames[] = $service['name'];
+							
+							echo implode(',', $serviceNames);
+							?>
+						</td>
+						<td>
+							<a class="customer-delete" href="#" data-customer-id="<?php echo $customer['id']?>"><?php echo plugin_lang_get( 'delete' ) ?></a>
+							<a class="customer-edit" href="#" data-customer-id="<?php echo $customer['id'] ?>" data-customer-name="<?php echo $customer['name'] ?>"><?php echo plugin_lang_get( 'edit' ) ?></a>
+						</td>
+					</tr>
+				<?php } ?>
+				<tr <?php echo helper_alternate_class() ?>>
+					<td colspan="4"><a href="#" class="service-edit"><?php echo plugin_lang_get('add_new_customer'); ?></a></td>
+				</tr>
+			</tbody>
+		</table>		
+	</div>
 </div>
 <form id="group-form" style="display: none" title="<?php echo plugin_lang_get('edit_group'); ?>">
 	<input type="hidden" name="id" />

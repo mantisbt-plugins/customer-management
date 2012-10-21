@@ -23,11 +23,30 @@ class CustomerManagementDao {
 	}
 
 	static function findAllCustomers() {
-		// TODO add services
-		return db_query_bound('
-				SELECT c.id, c.name, g.name AS group_name FROM ' . plugin_table('customer' ) . ' c 
-				LEFT JOIN '. plugin_table('group') . ' g ON g.id = c.group_id 
-				ORDER BY c.name');
+
+		$customers = self::toArray(db_query_bound('
+				SELECT c.id, c.name, g.name AS groupName FROM ' . plugin_table('customer' ) . ' c 
+				LEFT JOIN '. plugin_table('group') . ' g ON g.id = c.customer_group_id 
+				ORDER BY c.name'));
+		
+		$customers_to_services = self::toArray(db_query_bound('
+				SELECT c2s.*, s.name FROM  ' . plugin_table('customers_to_services') . ' c2s
+				LEFT JOIN ' . plugin_table('service') . ' s ON c2s.service_id = s.id
+				'));
+		
+		foreach ( $customers as & $customer ) {
+			$customer['services'] = array();
+			foreach ( $customers_to_services as $customer_to_service )  {
+				if ( $customer['id'] == $customer_to_service['customer_id']) {
+					$customer['services'][] = array(
+							'id' => $customer_to_service['service_id'],
+							'name' => $customer_to_service['name']
+					);
+				}
+			}
+		}
+		
+		return $customers;
 	}
 	
 	static function findAllServices() {
