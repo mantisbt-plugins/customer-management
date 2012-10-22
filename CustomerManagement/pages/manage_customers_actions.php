@@ -1,5 +1,7 @@
 <?php
 
+access_ensure_global_level( plugin_config_get( 'manage_customers_threshold' ) );
+
 form_security_validate('manage_customers');
 
 switch ( $_POST['action'] ) {
