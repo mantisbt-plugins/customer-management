@@ -71,3 +71,34 @@ CustomerManagementUi.confirm = function(message) {
 CustomerManagementUi.error = function(message) {
 	window.alert(message);
 }
+
+var CustomerManagementBugUi = function(customerIdToServiceId) {
+	this.customerIdToServiceId = customerIdToServiceId;
+};
+
+CustomerManagementBugUi.prototype.init = function() {
+	
+	var that = this;
+	
+	var updateBillableField = function() {
+		var customerId = jQuery('#cm_plugin_customer_id').val(); 
+		var serviceId = jQuery('#cm_plugin_service_id').val();
+		var isBillableField = jQuery("#cm_plugin_is_billable");
+
+		if ( customerId && serviceId) {
+			var isAssociatedService = false;
+			
+			var servicesForThisCustomer =  that.customerIdToServiceId[customerId];
+			for ( var i = 0 ; i < servicesForThisCustomer.length; i++ )
+				if ( servicesForThisCustomer[i] == serviceId ) 
+					isAssociatedService = true;
+			
+			isBillableField.prop('checked', !isAssociatedService);
+		} else {
+			isBillableField.prop('checked', false);
+		}
+	}
+	
+	jQuery('#cm_plugin_customer_id').change(updateBillableField);
+	jQuery('#cm_plugin_service_id').change(updateBillableField);
+}

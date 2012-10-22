@@ -142,7 +142,6 @@ print_manage_menu( plugin_page('manage_customers') );
 	<?php } ?>	
 	</select> 
 </form>
-<script type="text/javascript" src="<?php echo plugin_file('customer-management.js'); ?>"></script>
 <script>
 jQuery(document).ready(function($) {
 

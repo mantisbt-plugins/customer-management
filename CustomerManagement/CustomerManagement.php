@@ -78,12 +78,19 @@ class CustomerManagementPlugin extends MantisPlugin {
 
 	function hooks() {
 		return array(
-				"EVENT_MENU_MANAGE" => "menu_manage"
+				"EVENT_LAYOUT_RESOURCES" => "resources",
+				"EVENT_MENU_MANAGE" => "menu_manage",
+				"EVENT_REPORT_BUG_FORM_TOP" => "prepare_bug_report"
 		);
 	}
 	
 	function init() {
 		require_once 'api/CustomerManagementDao.php';
+		require_once 'api/CustomerManagementViewHelper.php';
+	}
+	
+	function resources() {
+		return '<script type="text/javascript" src="' . plugin_file('customer-management.js').'"></script>';
 	}
 	
 	public function menu_manage($event, $user_id) {
@@ -92,6 +99,67 @@ class CustomerManagementPlugin extends MantisPlugin {
 			$label = plugin_lang_get("manage_customers");
 			return '<a href="' . string_html_specialchars( $page ) . '">' . $label . '</a>';
 		}
-	}	
+	}
+	
+	public function prepare_bug_report ( $project_id ) {
+		
+		$customer_label = plugin_lang_get('customer');
+		$service_label = plugin_lang_get('service');
+		$is_billable_label = plugin_lang_get('is_billable');
+		
+		$class = helper_alternate_class();
+		$class2 = helper_alternate_class();
+		$class3 = helper_alternate_class();
+
+		$customer_select = CustomerManagementViewHelper::getCustomerSelect();
+		$service_select = CustomerManagementViewHelper::getServiceSelect();
+		$is_billable_checkbox = CustomerManagementViewHelper::getBillableCheckbox();
+		
+		$customers = CustomerManagementDao::findAllCustomers();
+		$customersToServices = array();
+		
+		foreach ( $customers as $customer ) {
+			$serviceIds = array();
+			foreach ( $customer['services'] as $service ) 
+				$serviceIds[] = $service['id'];
+			
+			$customersToServices[$customer['id']] = $serviceIds;
+		}
+		
+		$customersToServicesJson = json_encode( $customersToServices );
+		
+		$row = <<<EOD
+<tr $class>
+	<td class="category" width="30%">
+		$customer_label
+	</td>
+	<td width="70%">
+		$customer_select
+	</td>
+</tr>
+<tr $class2>
+	<td class="category" width="30%">
+		$service_label
+	</td>
+	<td width="70%">
+		$service_select
+	</td>
+</tr>
+<tr $class3>
+	<td class="category" width="30%">
+		$is_billable_label
+	</td>
+	<td width="70%">
+		$is_billable_checkbox
+	</td>
+</tr>
+<script type="text/javascript">
+var customerManagementBugUi = new CustomerManagementBugUi($customersToServicesJson);
+customerManagementBugUi.init();
+</script>
+EOD;
+		
+		echo $row;
+	}
 }
 

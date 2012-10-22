@@ -33,4 +33,7 @@ $s_plugin_CustomerManagement_edit_service = 'Edit Service';
 $s_plugin_CustomerManagement_edit_customer = 'Edit Customer';
 $s_plugin_CustomerManagement_customer_groups = 'Customer groups';
 $s_plugin_CustomerManagement_services = 'Services';
+$s_plugin_CustomerManagement_service = 'Service';
 $s_plugin_CustomerManagement_customers = 'Customers';
+$s_plugin_CustomerManagement_customer = 'Customer';
+$s_plugin_CustomerManagement_is_billable = 'Billable';
