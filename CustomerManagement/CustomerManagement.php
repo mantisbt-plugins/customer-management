@@ -51,7 +51,8 @@ class CustomerManagementPlugin extends MantisPlugin {
 				array("CreateTableSQL", array(plugin_table("customer"), "
 					id I NOTNULL UNSIGNED AUTOINCREMENT PRIMARY,
 					customer_group_id I NOTNULL UNSIGNED,
-					name C(128) NOTNULL
+					name C(128) NOTNULL,
+					email C(128) NOTNULL
 				")),
 				array("CreateTableSQL", array(plugin_table("customers_to_services"), "
 					customer_id I NOTNULL UNSIGNED,

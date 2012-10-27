@@ -37,3 +37,4 @@ $s_plugin_CustomerManagement_service = 'Service';
 $s_plugin_CustomerManagement_customers = 'Customers';
 $s_plugin_CustomerManagement_customer = 'Customer';
 $s_plugin_CustomerManagement_is_billable = 'Billable';
+$s_plugin_CustomerManagement_email = 'Email';

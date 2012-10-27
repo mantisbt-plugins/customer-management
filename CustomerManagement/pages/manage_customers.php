@@ -106,7 +106,8 @@ print_manage_menu( plugin_page('manage_customers') );
 						<td>
 							<a class="customer-delete" href="#" data-customer-id="<?php echo $customer['id']?>"><?php echo plugin_lang_get( 'delete' ) ?></a>
 							<a class="customer-edit" href="#" data-customer-id="<?php echo $customer['id'] ?>" data-customer-name="<?php echo $customer['name'] ?>"
-								data-group-id="<?php echo $customer['customer_group_id']; ?>" data-service-id="[<?php echo implode(",", $serviceIds); ?>]"><?php echo plugin_lang_get( 'edit' ) ?></a>
+								data-customer-email="<?php echo $customer['email']?>" data-group-id="<?php echo $customer['customer_group_id']; ?>" 
+								data-service-id="[<?php echo implode(",", $serviceIds); ?>]"><?php echo plugin_lang_get( 'edit' ) ?></a>
 						</td>
 					</tr>
 				<?php } ?>
@@ -131,6 +132,7 @@ print_manage_menu( plugin_page('manage_customers') );
 	<input type="hidden" name="id" />
 	<br />
 	<label for="name">Name</label> <input type="text" name="name"/> <br />
+	<label for="name">Email</label> <input type="text" name="email"/> <br />
 	<label for="customer_group_id">Group</label> <select name="customer_group_id">
 	<?php foreach ( CustomerManagementDao::findAllGroups() as $group ) { ?>
 		<option value="<?php echo $group['id']; ?>"><?php echo $group['name']?></option>
@@ -249,13 +251,15 @@ jQuery(document).ready(function($) {
 		var name = $(this).data('customer-name');
 		var groupId = $(this).data('group-id');
 		var serviceId = $(this).data('service-id');
+		var email = $(this).data('customer-email');
 
 		var form = $('#customer-form');
 		form.find('input[name=id]').val(id);
 		form.find('input[name=name]').val(name);
 		form.find('select[name=customer_group_id]').val(groupId);
 		form.find('select[name="service_id[]"]').val(serviceId);
-		
+		form.find('input[name=email]').val(email);
+				
 		form.dialog({
 			'modal' : true,
 			buttons: {

@@ -92,12 +92,12 @@ class CustomerManagementDao {
 			db_query_bound('UPDATE ' . plugin_table('service') . ' SET name = ? WHERE id = ? ', array($name, $id));
 	}
 
-	static function saveCustomer( $id, $name, $customerGroupId, $serviceIds ) {
+	static function saveCustomer( $id, $name, $customerGroupId, $email, $serviceIds ) {
 		if ( $id == null ) {
-			db_query_bound('INSERT INTO ' . plugin_table('customer') . ' (name, customer_group_id) VALUES (?, ?)', array($name, $customerGroupId) );
+			db_query_bound('INSERT INTO ' . plugin_table('customer') . ' (name, customer_group_id, email) VALUES (?, ?, ?)', array($name, $customerGroupId, $email) );
 			$id = db_insert_id( plugin_table('customer'));
 		} else {
-			db_query_bound('UPDATE ' . plugin_table('customer') . ' SET name = ?, customer_group_id = ? WHERE id = ? ', array($name, $customerGroupId, $id));
+			db_query_bound('UPDATE ' . plugin_table('customer') . ' SET name = ?, customer_group_id = ?, email = ? WHERE id = ? ', array($name, $customerGroupId, $email, $id));
 			self::deleteCustomersToServices( $id );			
 		}
 		
