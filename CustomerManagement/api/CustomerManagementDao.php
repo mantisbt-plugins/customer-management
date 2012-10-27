@@ -114,6 +114,19 @@ class CustomerManagementDao {
 				(bug_id, customer_id, service_id, is_billable) 
 				VALUES(?, ?, ?, ?)', array( $bugId, $customerId, $serviceId, $isBillable ));
 	}
+
+	static function getBugData( $bugId ) {
+		$rows = self::toArray(db_query_bound('SELECT * FROM ' . plugin_table('bug_data') . ' WHERE bug_id = ?', array( $bugId)));
+		return self::first($rows, null);
+	}
+	
+	private static function first( $array, $default) {
+		
+		if ( count($array) == 1)
+			return $array[0];
+		
+		return $default;
+	}
 	
 	static function isServiceBillable ( $customerId, $serviceId ) {
 		$res = db_fetch_array(db_query_bound('
@@ -121,5 +134,15 @@ class CustomerManagementDao {
 				WHERE customer_id = ? AND service_id = ?', array ( $customerId, $serviceId) ));
 		
 		return $res[0]['count'] == 0;
+	}
+	
+	static function getCustomer( $customerId ) {
+		$rows = self::toArray(db_query_bound('SELECT * FROM ' . plugin_table('customer') . ' WHERE id = ?', array( $customerId) ));
+		return self::first($rows, null);
+	}
+
+	static function getService( $serviceId ) {
+		$rows = self::toArray(db_query_bound('SELECT * FROM ' . plugin_table('service') . ' WHERE id = ?', array( $serviceId) ));
+		return self::first($rows, null);
 	}
 }

@@ -88,7 +88,8 @@ class CustomerManagementPlugin extends MantisPlugin {
 				"EVENT_LAYOUT_RESOURCES" => "resources",
 				"EVENT_MENU_MANAGE" => "menu_manage",
 				"EVENT_REPORT_BUG_FORM_TOP" => "prepare_bug_report",
-				"EVENT_REPORT_BUG" => "save_new_bug"
+				"EVENT_REPORT_BUG" => "save_new_bug",
+				"EVENT_VIEW_BUG_DETAILS" => "view_bug_details"
 		);
 	}
 	
@@ -180,6 +181,36 @@ EOD;
 			CustomerManagementDao::saveBugData($p_bug_id, $customer_id, $service_id, $is_billable );
 		
 		return $p_bug_data;
+	}
+	
+	public function view_bug_details( $p_event, $p_bug_id ) {
+		
+		$bug_data = CustomerManagementDao::getBugData( $p_bug_id );
+		if ( !$bug_data )
+			return;
+		
+		$class = helper_alternate_class();
+		$customer_label = plugin_lang_get('customer');
+		$service_label = plugin_lang_get('service');
+		$is_billable_label = plugin_lang_get('is_billable');
+		
+		$customer = CustomerManagementDao::getCustomer( $bug_data['customer_id']);
+		$service = CustomerManagementDao::getService( $bug_data['service_id']);
+		$is_billable = $bug_data['is_billable'] ? lang_get('yes') : lang_get('no');
+
+		if ( $bug_data ) {
+			$row = <<<EOD
+<tr $class>
+	<td class="category">$customer_label</td>
+	<td>${customer['name']}</td>
+	<td class="category">$service_label</td>
+	<td>${service['name']}</td>
+	<td class="category">$is_billable_label</td>
+	<td>$is_billable</td>
+</tr>
+EOD;
+			echo $row;
+		}
 	}
 }
 
