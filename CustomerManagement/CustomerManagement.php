@@ -65,7 +65,14 @@ class CustomerManagementPlugin extends MantisPlugin {
 				),
 				array("CreateIndexSQL",
 						array("idx_c2s_to_service",plugin_table("customers_to_services"), "service_id")
-				)
+				),
+				array("CreateTableSQL", array(plugin_table("bug_data"), "
+					bug_id I NOTNULL UNSIGNED,
+					customer_id I NOTNULL UNSIGNED,
+					service_id I NOTNULL UNSIGNED,
+					is_billable L NOTNULL
+				")),
+				
 		);
 	}
 	
@@ -80,7 +87,8 @@ class CustomerManagementPlugin extends MantisPlugin {
 		return array(
 				"EVENT_LAYOUT_RESOURCES" => "resources",
 				"EVENT_MENU_MANAGE" => "menu_manage",
-				"EVENT_REPORT_BUG_FORM_TOP" => "prepare_bug_report"
+				"EVENT_REPORT_BUG_FORM_TOP" => "prepare_bug_report",
+				"EVENT_REPORT_BUG" => "save_new_bug"
 		);
 	}
 	
@@ -160,6 +168,18 @@ customerManagementBugUi.init();
 EOD;
 		
 		echo $row;
+	}
+	
+	public function save_new_bug( $p_event, $p_bug_data,  $p_bug_id ) {
+		
+		$customer_id = gpc_get_int('cm_plugin_customer_id', null);
+		$service_id = gpc_get_int('cm_plugin_service_id', null);
+		$is_billable = gpc_get_bool('cm_plugin_is_billable', false);
+		
+		if ( $customer_id )
+			CustomerManagementDao::saveBugData($p_bug_id, $customer_id, $service_id, $is_billable );
+		
+		return $p_bug_data;
 	}
 }
 

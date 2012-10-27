@@ -106,4 +106,12 @@ class CustomerManagementDao {
 				INSERT INTO ' . plugin_table('customers_to_services') . ' (customer_id, service_id) 
 				VALUES (?,?)', array($id, $serviceId));
 	}
+	
+	static function saveBugData( $bugId, $customerId, $serviceId, $isBillable ) {
+		db_query_bound('DELETE FROM ' . plugin_table('bug_data') . ' WHERE bug_id = ?', array( $bugId ));
+		db_query_bound('
+				INSERT INTO ' . plugin_table('bug_data') . ' 
+				(bug_id, customer_id, service_id, is_billable) 
+				VALUES(?, ?, ?, ?)', array( $bugId, $customerId, $serviceId, $isBillable ));
+	}
 }
