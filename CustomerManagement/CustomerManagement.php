@@ -90,6 +90,7 @@ class CustomerManagementPlugin extends MantisPlugin {
 				"EVENT_LAYOUT_RESOURCES" => "resources",
 				"EVENT_MENU_MANAGE" => "menu_manage",
 				"EVENT_REPORT_BUG_FORM_TOP" => "prepare_bug_report",
+				"EVENT_UPDATE_BUG_FORM" => "prepare_bug_update",
 				"EVENT_REPORT_BUG" => "save_new_bug",
 				"EVENT_VIEW_BUG_DETAILS" => "view_bug_details"
 		);
@@ -112,8 +113,15 @@ class CustomerManagementPlugin extends MantisPlugin {
 		}
 	}
 	
-	public function prepare_bug_report ( $project_id ) {
-		
+	public function prepare_bug_report ( $event, $project_id ) {
+		$this->prepage_bug_report_internal(true);
+	}
+
+	public function prepare_bug_update ( $event, $bug_id ) {
+		$this->prepage_bug_report_internal(false, $bug_id);
+	}
+	
+	private function prepage_bug_report_internal( $verticalLayout, $bug_id = 0 ) {
 		if ( !access_has_global_level(plugin_config_get('edit_customer_fields_threshold'))) {
 			return;
 		}
@@ -143,6 +151,8 @@ class CustomerManagementPlugin extends MantisPlugin {
 		
 		$customersToServicesJson = json_encode( $customersToServices );
 		
+		if ( $verticalLayout ) {
+		
 		$row = <<<EOD
 <tr $class>
 	<td class="category" width="30%">
@@ -168,13 +178,41 @@ class CustomerManagementPlugin extends MantisPlugin {
 		$is_billable_checkbox
 	</td>
 </tr>
+EOD;
+		} else {
+			$row = <<<EOD
+<tr $class>
+	<td class="category">
+		$customer_label
+	</td>
+	<td>
+		$customer_select
+	</td>
+	<td class="category">
+		$service_label
+	</td>
+	<td>
+		$service_select
+	</td>
+	<td class="category">
+		$is_billable_label
+	</td>
+	<td>
+		$is_billable_checkbox
+	</td>
+</tr>
+EOD;
+		}
+		
+		$row .= <<<EOD
 <script type="text/javascript">
 var customerManagementBugUi = new CustomerManagementBugUi($customersToServicesJson);
 customerManagementBugUi.init();
-</script>
+</script>		
 EOD;
 		
 		echo $row;
+		
 	}
 	
 	public function save_new_bug( $p_event, $p_bug_data,  $p_bug_id ) {
