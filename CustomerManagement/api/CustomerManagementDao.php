@@ -114,4 +114,12 @@ class CustomerManagementDao {
 				(bug_id, customer_id, service_id, is_billable) 
 				VALUES(?, ?, ?, ?)', array( $bugId, $customerId, $serviceId, $isBillable ));
 	}
+	
+	static function isServiceBillable ( $customerId, $serviceId ) {
+		$res = db_fetch_array(db_query_bound('
+				SELECT COUNT(*) AS count FROM ' . plugin_table('customers_to_services') . ' 
+				WHERE customer_id = ? AND service_id = ?', array ( $customerId, $serviceId) ));
+		
+		return $res[0]['count'] == 0;
+	}
 }

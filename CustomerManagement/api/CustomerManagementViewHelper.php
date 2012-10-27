@@ -25,6 +25,6 @@ class CustomerManagementViewHelper {
 
 	static function getBillableCheckbox($checked = false) {
 		
-		return '<input type="checkbox" name="cm_plugin_is_billable" id="cm_plugin_is_billable">';
+		return '<input type="checkbox" name="cm_plugin_is_billable" id="cm_plugin_is_billable" disabled="disabled">';
 	}
 }
