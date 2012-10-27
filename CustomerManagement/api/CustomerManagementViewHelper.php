@@ -5,8 +5,10 @@ class CustomerManagementViewHelper {
 		
 		$customers = CustomerManagementDao::findAllCustomers();
 		$output = '<select id="cm_plugin_customer_id" name="cm_plugin_customer_id"><option value=""></option>';
-		foreach ( $customers as $customer )
-			$output .= "<option value={$customer['id']}>{$customer['name']}</option>";
+		foreach ( $customers as $customer ){
+			$selected_attr = $selected == $customer['id'] ? ' selected="selected" ' : '';
+			$output .= "<option value=\"{$customer['id']}\" $selected_attr>{$customer['name']}</option>";
+		}
 		$output .= '</select>';
 
 		return $output;
@@ -16,8 +18,10 @@ class CustomerManagementViewHelper {
 		
 		$services = CustomerManagementDao::findAllServices();
 		$output = '<select id="cm_plugin_service_id" name="cm_plugin_service_id"><option value=""></option>';
-		foreach ( $services as $service )
-			$output .= "<option value={$service['id']}>{$service['name']}</option>";
+		foreach ( $services as $service ) {
+			$selected_attr = $selected == $service['id'] ? ' selected="selected" ' : '';
+			$output .= "<option value=\"{$service['id']}\" $selected_attr>{$service['name']}</option>";
+		}
 		$output .= '</select>';
 
 		return $output;
@@ -25,6 +29,8 @@ class CustomerManagementViewHelper {
 
 	static function getBillableCheckbox($checked = false) {
 		
-		return '<input type="checkbox" name="cm_plugin_is_billable" id="cm_plugin_is_billable" disabled="disabled">';
+		$checked_attr = $checked ? ' checked="checked" ' : '';
+ 		
+		return '<input type="checkbox" name="cm_plugin_is_billable" id="cm_plugin_is_billable" disabled="disabled" '.$checked_attr .'>';
 	}
 }
