@@ -6,6 +6,9 @@ access_ensure_global_level( plugin_config_get( 'manage_customers_threshold' ) );
 html_page_top( plugin_lang_get( 'manage_customers' ) );
 
 print_manage_menu( plugin_page('manage_customers') );
+
+$groups = CustomerManagementDao::findAllGroups();
+$customers = CustomerManagementDao::findAllCustomers(); 
 ?>
 <style type="text/css">
 	.ui-dialog-content label {
@@ -36,7 +39,7 @@ print_manage_menu( plugin_page('manage_customers') );
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach ( CustomerManagementDao::findAllGroups() as $group ) { ?>
+				<?php foreach ( $groups as $group ) { ?>
 					<tr <?php echo helper_alternate_class() ?>>
 						<td><?php echo $group['name']?></td>
 						<td>
@@ -81,6 +84,7 @@ print_manage_menu( plugin_page('manage_customers') );
 		<table class="width50">
 			<thead>
 				<tr <?php echo helper_alternate_class() ?>>
+					<th>-</th>
 					<th>Name</th>
 					<th>Group</th>
 					<th>Services</th>
@@ -88,8 +92,20 @@ print_manage_menu( plugin_page('manage_customers') );
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach ( CustomerManagementDao::findAllCustomers() as $customer ) { ?>
+				<?php foreach ( $groups as $group ) { ?>
+					<tr>
+						<td><input class="emailSelector" data-customer-group-id="<?php echo $group['id']?>" type="checkbox"/></td>
+						<td colspan="4"><?php echo $group['name']?></td>
+					</tr>
+					
+				<?php 		
+						foreach ( $customers as $customer ) {
+							if ( $customer['customer_group_id'] != $group['id'] )
+								continue; 
+				?>
 					<tr <?php echo helper_alternate_class() ?>>
+						<td><input class="emailSelector" data-customer-group-id="<?php echo $group['id']?>" 
+							data-customer-id="<?php echo $customer['id'] ?>" type="checkbox"/></td>
 						<td><?php echo $customer['name']?></td>
 						<td><?php echo $customer['groupName']?></td>
 						<td><?php 
@@ -110,9 +126,16 @@ print_manage_menu( plugin_page('manage_customers') );
 								data-service-id="[<?php echo implode(",", $serviceIds); ?>]"><?php echo plugin_lang_get( 'edit' ) ?></a>
 						</td>
 					</tr>
-				<?php } ?>
+				<?php
+						}
+					} 
+				?>
 				<tr <?php echo helper_alternate_class() ?>>
-					<td colspan="4"><a href="#" class="customer-edit"><?php echo plugin_lang_get('add_new_customer'); ?></a></td>
+					<td colspan="5">
+						<a href="#" class="customer-edit"><?php echo plugin_lang_get('add_new_customer'); ?></a>
+						<a href="#" class="email-send"><?php echo plugin_lang_get('send_email_notifications'); ?></a>
+						( <a href="#" class="email-select-all"><?php echo lang_get('select_all'); ?></a> )
+					</td>
 				</tr>
 			</tbody>
 		</table>		
@@ -274,6 +297,43 @@ jQuery(document).ready(function($) {
 				}
 			}
 		});
+	});
+
+	$('.emailSelector').click(function() {
+
+		// just a customer id, allow default behaviour
+		if ( $(this).data('customer-id') )
+			return;
+
+		// customer group id switch , propagate to all matching customers
+		if ( $(this).data('customer-group-id') ) {
+			$(".emailSelector[data-customer-group-id=" + $(this).data('customer-group-id') + "]" )
+				.prop('checked', $(this).prop('checked') );
+		}
+	});
+
+	$('.email-select-all').click(function() {
+		$('.emailSelector').prop('checked', true);
+		return false;
+	});
+
+	$('.email-send').click(function() {
+
+		var ids = [];
+		
+		$('.emailSelector:checked').each(function(index, value) {
+
+			var customerId = $(value).data('customer-id');
+			if ( customerId ) 
+				ids.push(customerId);
+		});
+
+		if ( ids.length == 0 ) 
+			ui.error("<?php echo plugin_lang_get('no_entries_selected_for_notification'); ?>");
+		else
+			ui.error("Not implemented. Would be preparing notifications for customers with id(s) '" + ids + "' .");
+
+		return false;
 	});
   });
 </script>

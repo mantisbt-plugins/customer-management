@@ -38,3 +38,5 @@ $s_plugin_CustomerManagement_customers = 'Customers';
 $s_plugin_CustomerManagement_customer = 'Customer';
 $s_plugin_CustomerManagement_is_billable = 'Billable';
 $s_plugin_CustomerManagement_email = 'Email';
+$s_plugin_CustomerManagement_send_email_notifications = 'Send email notifications';
+$s_plugin_CustomerManagement_no_entries_selected_for_notification = 'No entries selected for email notification. Please select at least one customer.';
