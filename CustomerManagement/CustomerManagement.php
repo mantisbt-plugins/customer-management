@@ -91,7 +91,8 @@ class CustomerManagementPlugin extends MantisPlugin {
 				"EVENT_MENU_MANAGE" => "menu_manage",
 				"EVENT_REPORT_BUG_FORM_TOP" => "prepare_bug_report",
 				"EVENT_UPDATE_BUG_FORM" => "prepare_bug_update",
-				"EVENT_REPORT_BUG" => "save_new_bug",
+				"EVENT_UPDATE_BUG" => "save_bug",
+				"EVENT_REPORT_BUG" => "save_bug",
 				"EVENT_VIEW_BUG_DETAILS" => "view_bug_details"
 		);
 	}
@@ -126,6 +127,19 @@ class CustomerManagementPlugin extends MantisPlugin {
 			return;
 		}
 		
+		$customer_id = 0;
+		$service_id = 0;
+		$is_billable = 0;
+		
+		if ( $bug_id ) {
+			$bug_data = CustomerManagementDao::getBugData( $bug_id );
+			if ( $bug_data ) {
+				$customer_id = $bug_data['customer_id'];
+				$service_id = $bug_data['service_id'];
+				$is_billable = $bug_data['is_billable'] == 1;
+			}
+		}
+		
 		$customer_label = plugin_lang_get('customer');
 		$service_label = plugin_lang_get('service');
 		$is_billable_label = plugin_lang_get('is_billable');
@@ -134,9 +148,9 @@ class CustomerManagementPlugin extends MantisPlugin {
 		$class2 = helper_alternate_class();
 		$class3 = helper_alternate_class();
 
-		$customer_select = CustomerManagementViewHelper::getCustomerSelect();
-		$service_select = CustomerManagementViewHelper::getServiceSelect();
-		$is_billable_checkbox = CustomerManagementViewHelper::getBillableCheckbox();
+		$customer_select = CustomerManagementViewHelper::getCustomerSelect( $customer_id);
+		$service_select = CustomerManagementViewHelper::getServiceSelect( $service_id );
+		$is_billable_checkbox = CustomerManagementViewHelper::getBillableCheckbox( $is_billable);
 		
 		$customers = CustomerManagementDao::findAllCustomers();
 		$customersToServices = array();
@@ -215,7 +229,7 @@ EOD;
 		
 	}
 	
-	public function save_new_bug( $p_event, $p_bug_data,  $p_bug_id ) {
+	public function save_bug( $p_event, $p_bug_data,  $p_bug_id ) {
 		
 		if ( !access_has_global_level(plugin_config_get('edit_customer_fields_threshold'))) {
 			return;
@@ -225,12 +239,13 @@ EOD;
 		$service_id = gpc_get_int('cm_plugin_service_id', null);
 		$is_billable = CustomerManagementDao::isServiceBillable( $customer_id, $service_id );
 		
+		error_log("Saving");
+		
 		if ( $customer_id )
 			CustomerManagementDao::saveBugData($p_bug_id, $customer_id, $service_id, $is_billable );
 		
 		return $p_bug_data;
 	}
-	
 	public function view_bug_details( $p_event, $p_bug_id ) {
 		
 		if ( !access_has_global_level(plugin_config_get('view_customer_fields_threshold'))) {
