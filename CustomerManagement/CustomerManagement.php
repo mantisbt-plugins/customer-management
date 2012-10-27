@@ -94,7 +94,8 @@ class CustomerManagementPlugin extends MantisPlugin {
 				"EVENT_UPDATE_BUG_FORM" => "prepare_bug_update",
 				"EVENT_UPDATE_BUG" => "save_bug",
 				"EVENT_REPORT_BUG" => "save_bug",
-				"EVENT_VIEW_BUG_DETAILS" => "view_bug_details"
+				"EVENT_VIEW_BUG_DETAILS" => "view_bug_details",
+				"EVENT_BUG_DELETED" => "delete_bug"
 		);
 	}
 	
@@ -279,6 +280,11 @@ EOD;
 EOD;
 			echo $row;
 		}
+	}
+	
+	public function delete_bug( $p_event, $p_bug_id ) {
+	
+		CustomerManagementDao::deleteBugData( $p_bug_id );
 	}
 }
 
