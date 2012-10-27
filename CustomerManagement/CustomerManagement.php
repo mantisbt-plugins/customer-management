@@ -79,7 +79,9 @@ class CustomerManagementPlugin extends MantisPlugin {
 
 	function config() {
 		return array(
-				"manage_customers_threshold" => ADMINISTRATOR
+				"manage_customers_threshold" => ADMINISTRATOR,
+				"view_customer_fields_threshold" => DEVELOPER,
+				"edit_customer_fields_threshold" => DEVELOPER
 		);
 	}
 
@@ -111,6 +113,10 @@ class CustomerManagementPlugin extends MantisPlugin {
 	}
 	
 	public function prepare_bug_report ( $project_id ) {
+		
+		if ( !access_has_global_level(plugin_config_get('edit_customer_fields_threshold'))) {
+			return;
+		}
 		
 		$customer_label = plugin_lang_get('customer');
 		$service_label = plugin_lang_get('service');
@@ -173,6 +179,10 @@ EOD;
 	
 	public function save_new_bug( $p_event, $p_bug_data,  $p_bug_id ) {
 		
+		if ( !access_has_global_level(plugin_config_get('edit_customer_fields_threshold'))) {
+			return;
+		}
+		
 		$customer_id = gpc_get_int('cm_plugin_customer_id', null);
 		$service_id = gpc_get_int('cm_plugin_service_id', null);
 		$is_billable = CustomerManagementDao::isServiceBillable( $customer_id, $service_id );
@@ -184,6 +194,10 @@ EOD;
 	}
 	
 	public function view_bug_details( $p_event, $p_bug_id ) {
+		
+		if ( !access_has_global_level(plugin_config_get('view_customer_fields_threshold'))) {
+			return;
+		}
 		
 		$bug_data = CustomerManagementDao::getBugData( $p_bug_id );
 		if ( !$bug_data )
