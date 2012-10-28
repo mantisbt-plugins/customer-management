@@ -105,7 +105,7 @@ $customers = CustomerManagementDao::findAllCustomers();
 				?>
 					<tr <?php echo helper_alternate_class() ?>>
 						<td><input class="emailSelector" data-customer-group-id="<?php echo $group['id']?>" 
-							data-customer-id="<?php echo $customer['id'] ?>" type="checkbox"/></td>
+							data-customer-id="<?php echo $customer['id'] ?>" data-customer-name="<?php echo $customer['name'] ?>" type="checkbox"/></td>
 						<td><?php echo $customer['name']?></td>
 						<td><?php echo $customer['groupName']?></td>
 						<td><?php 
@@ -320,18 +320,77 @@ jQuery(document).ready(function($) {
 	$('.email-send').click(function() {
 
 		var ids = [];
+		var notification = $('<div>').attr('title', 'Email notification')
+							.append($('<p>').text('<?php echo plugin_lang_get('email_notification_info'); ?>'));
+		var customerList = $('<ol>');
 		
 		$('.emailSelector:checked').each(function(index, value) {
 
 			var customerId = $(value).data('customer-id');
-			if ( customerId ) 
+			if ( customerId ) {
 				ids.push(customerId);
+				customerList.append($("<li>").text($(value).data('customer-name')));
+			}
 		});
 
-		if ( ids.length == 0 ) 
+		if ( ids.length == 0 )  {
 			ui.error("<?php echo plugin_lang_get('no_entries_selected_for_notification'); ?>");
-		else
-			ui.error("Not implemented. Would be preparing notifications for customers with id(s) '" + ids + "' .");
+			return;
+		}
+
+		customerList.appendTo(notification);
+
+		customerList.append($('<label>').text("<?php echo plugin_lang_get('date_from'); ?>"));
+		customerList.append($('<input>').attr({
+			'type' : 'text',
+			'class' : 'datepicker',
+			'name' : 'from'
+		}));
+		
+		customerList.append($('<label>').text("<?php echo plugin_lang_get('date_to'); ?>"));
+		customerList.append($('<input>').attr({
+			'type' : 'text',
+			'class' : 'datepicker',
+			'name' : 'to'
+		}));
+
+		customerList.append($('<input>').attr({
+			'type': 'button',
+			'value': '<?php echo plugin_lang_get('send_notification'); ?>'
+		}).click(function() {
+			var from = notification.find('[name=from]');
+			var to = notification.find('[name=to]');
+
+			var errors = [];
+			if ( !from.val() )
+				errors.push('<?php echo plugin_lang_get('notification_from_date_required'); ?>');
+			if ( !to.val() )
+				errors.push('<?php echo plugin_lang_get('notification_to_date_required'); ?>');
+
+			if ( errors.length != 0 ) {
+				ui.error(errors.join("\n"));
+				return;
+			}
+
+			var fromAsDate = new Date(from.val());
+			var toAsDate = new Date(to.val());
+
+			if ( fromAsDate > toAsDate ) {
+				ui.error('<?php echo plugin_lang_get('notification_from_date_must_be_before_end_date'); ?>');
+				return;
+			}
+			
+			if ( !ui.confirm('<?php echo plugin_lang_get('send_notification_confirm'); ?>') )
+				return;
+
+			ui.error("Not implemented.");
+		}));
+		
+		notification.dialog( {'width' : '360px'} );
+		// use ISO 8601 date format ; we don't have a proper bridge to the MantisBT date format yet
+		notification.find('.datepicker').datepicker( {'maxDate': 0, 'dateFormat' : 'yy-mm-dd'});
+		
+		
 
 		return false;
 	});
