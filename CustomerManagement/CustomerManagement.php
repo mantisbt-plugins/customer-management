@@ -102,6 +102,7 @@ class CustomerManagementPlugin extends MantisPlugin {
 	function init() {
 		require_once 'api/CustomerManagementDao.php';
 		require_once 'api/CustomerManagementViewHelper.php';
+		require_once 'api/CustomerNotifier.php';
 	}
 	
 	function resources() {

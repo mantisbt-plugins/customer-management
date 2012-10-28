@@ -1,7 +1,8 @@
 <?php
+require_once 'core/json_api.php';
+set_error_handler('json_error_handler');
 
 access_ensure_global_level( plugin_config_get( 'manage_customers_threshold' ) );
-
 form_security_validate('manage_customers');
 
 switch ( $_POST['action'] ) {
@@ -24,5 +25,11 @@ switch ( $_POST['action'] ) {
 		CustomerManagementDao::saveCustomer(gpc_get_int('id', null), gpc_get_string('name'), 
 			gpc_get_int('customer_group_id'), gpc_get_string('email'), gpc_get_int_array('service_id', array()));
 		break;
+	case 'sendNotification':
+		CustomerNotifier::notifyCustomers(gpc_get_int_array('customer_id'), 
+			gpc_get_string('from'), gpc_get_string('to'));
+		break;
 }
+
+echo json_output_response();
 ?>

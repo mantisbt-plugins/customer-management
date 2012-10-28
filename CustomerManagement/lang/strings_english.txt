@@ -48,3 +48,4 @@ $s_plugin_CustomerManagement_send_notification_confirm = 'Please confirm that th
 $s_plugin_CustomerManagement_notification_from_date_required = 'Please specify the date to gather changes from.';
 $s_plugin_CustomerManagement_notification_to_date_required = 'Please specify the date to gather changes to.';
 $s_plugin_CustomerManagement_notification_from_date_must_be_before_end_date = 'The from date must be before the to date.';
+$s_plugin_CustomerManagement_unspecified_error = 'An unspecified error has occured. Please contact your MantisBT administrator.';

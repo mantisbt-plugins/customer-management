@@ -383,14 +383,25 @@ jQuery(document).ready(function($) {
 			if ( !ui.confirm('<?php echo plugin_lang_get('send_notification_confirm'); ?>') )
 				return;
 
-			ui.error("Not implemented.");
+			var errorWithDefault = function(message) {
+				if ( !message) 
+					message = '<?php echo plugin_lang_get('unspecified_error') ?>';
+
+				ui.error(message);
+			}
+
+			var payload = {
+				'from' : from.val(),
+				'to' : to.val(),
+				'customer_id[]' : ids
+			}
+			
+			api.sendNotification(payload, ui.error, errorWithDefault);
 		}));
 		
 		notification.dialog( {'width' : '360px'} );
 		// use ISO 8601 date format ; we don't have a proper bridge to the MantisBT date format yet
 		notification.find('.datepicker').datepicker( {'maxDate': 0, 'dateFormat' : 'yy-mm-dd'});
-		
-		
 
 		return false;
 	});

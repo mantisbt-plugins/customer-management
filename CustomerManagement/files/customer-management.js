@@ -59,7 +59,29 @@ CustomerManagement.prototype.saveCustomer = function(data, success) {
 	var payload = {'action': 'saveCustomer', 'manage_customers_token' : this.csrfToken };
 	
 	jQuery.post(this.entryPoint, jQuery.extend(payload, data) )
-	.done(success.call());
+		.done(success.call());
+}
+
+CustomerManagement.prototype.sendNotification = function(data, success, error) {
+	var payload = {'action': 'sendNotification', 'manage_customers_token' : this.csrfToken };
+	
+	jQuery.post(this.entryPoint, jQuery.extend(payload, data) )
+		.done(function(result) {
+			if ( !result ) {
+				error.call();
+				return;
+			}
+			
+			if ( result.status == 'ERROR') {
+				error(result.type + " : " + result.contents);
+				return;
+			}
+			
+			success.call();
+		})
+		.fail(function(data) {
+			error.call();
+		});
 }
 
 var CustomerManagementUi = {};
