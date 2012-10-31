@@ -1,7 +1,4 @@
 <?php 
-require_once 'core/email_api.php';
-require_once 'core/bug_api.php';
-
 class CustomerNotifier {
 	
 	const SECONDS_IN_DAY = 86400;
