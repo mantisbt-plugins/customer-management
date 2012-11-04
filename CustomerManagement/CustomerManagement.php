@@ -96,7 +96,8 @@ class CustomerManagementPlugin extends MantisPlugin {
 				"EVENT_UPDATE_BUG" => "save_bug",
 				"EVENT_REPORT_BUG" => "save_bug",
 				"EVENT_VIEW_BUG_DETAILS" => "view_bug_details",
-				"EVENT_BUG_DELETED" => "delete_bug"
+				"EVENT_BUG_DELETED" => "delete_bug",
+				'EVENT_FILTER_COLUMNS' => 'add_columns'
 		);
 	}
 	
@@ -104,6 +105,9 @@ class CustomerManagementPlugin extends MantisPlugin {
 		require_once 'api/CustomerManagementDao.php';
 		require_once 'api/CustomerManagementViewHelper.php';
 		require_once 'api/CustomerNotifier.php';
+		require_once 'api/CustomerColumn.php';
+		require_once 'api/ServiceColumn.php';
+		require_once 'api/IsBillableColumn.php';
 	}
 	
 	function resources() {
@@ -287,6 +291,10 @@ EOD;
 	public function delete_bug( $p_event, $p_bug_id ) {
 	
 		CustomerManagementDao::deleteBugData( $p_bug_id );
+	}
+
+	function add_columns() {
+		return array( 'CustomerColumn', 'ServiceColumn', 'IsBillableColumn' );
 	}
 }
 
