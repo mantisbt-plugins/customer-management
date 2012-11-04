@@ -43,6 +43,7 @@ class CustomerNotifier {
 					
 					$bugId = $changeForCustomer['bug']->id;
 					
+					$text .= $counter .'. ';
 					$text .= sprintf(plugin_lang_get('email_notification_bug_header'), $changeForCustomer['bug']->id, 
 							$changeForCustomer['bug']->summary , get_enum_element('status', $changeForCustomer['bug']->status));
 					$text .= "\n";
