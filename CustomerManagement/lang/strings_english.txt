@@ -49,3 +49,8 @@ $s_plugin_CustomerManagement_notification_from_date_required = 'Please specify t
 $s_plugin_CustomerManagement_notification_to_date_required = 'Please specify the date to gather changes to.';
 $s_plugin_CustomerManagement_notification_from_date_must_be_before_end_date = 'The from date must be before the to date.';
 $s_plugin_CustomerManagement_unspecified_error = 'An unspecified error has occured. Please contact your MantisBT administrator.';
+
+$s_plugin_CustomerManagement_email_notification_title = 'Activity report for %s between %s and %s';
+$s_plugin_CustomerManagement_email_notification_bug_header = 'Bug %s : %s | Status: %s';
+$s_plugin_CustomerManagement_email_notification_bug_reported_by = 'Reported by %s <%s>';
+$s_plugin_CustomerManagement_email_notification_bug_description = 'Description: %s';

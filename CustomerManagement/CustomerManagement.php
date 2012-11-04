@@ -82,7 +82,8 @@ class CustomerManagementPlugin extends MantisPlugin {
 		return array(
 				"manage_customers_threshold" => ADMINISTRATOR,
 				"view_customer_fields_threshold" => DEVELOPER,
-				"edit_customer_fields_threshold" => DEVELOPER
+				"edit_customer_fields_threshold" => DEVELOPER,
+				"email_notification_language" => "english"
 		);
 	}
 

@@ -151,22 +151,23 @@ class CustomerManagementDao {
 		return self::first($rows, null);
 	}
 	
-	static function findAllBugChanges( $customer_ids, $from, $to ) {
+	/**
+	 * @param array $customer_ids
+	 * @param date $from
+	 * @param date $to
+	 * @return array ('bug_id', 'customer_id')
+	 */
+	static function findAllChangedBugIds( $customer_ids, $from, $to ) {
 		
 		if ( count ( $customer_ids ) == 0 )
 			return array();
 		
-		$resolvedStatus = config_get('bug_resolved_status_threshold');
-
 		return self::toArray(db_query_bound(
-				'SELECT * FROM ' . db_get_table('mantis_bug_history_table') . ' h
+				'SELECT DISTINCT h.bug_id, customer_id FROM ' . db_get_table('mantis_bug_history_table') . ' h
 				LEFT JOIN ' . plugin_table('bug_data') . ' d ON h.bug_id = d.bug_id
 				WHERE h.date_modified BETWEEN ? AND ? 
-				AND customer_id IN ('.implode( ',', $customer_ids).')
-				AND field_name = "status"
-				AND old_value < ?
-				AND new_value >= ?',
-				array($from, $to, $resolvedStatus, $resolvedStatus)
+				AND customer_id IN ('.implode( ',', $customer_ids).')',
+				array($from, $to)
 		));
 	}
 }

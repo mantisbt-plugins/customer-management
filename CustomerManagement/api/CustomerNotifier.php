@@ -14,38 +14,54 @@ class CustomerNotifier {
 	 */
 	static function notifyCustomers( $customer_ids, $from, $to ) {
 		
+		lang_push( plugin_config_get('email_notification_language'));
+		
 		$notifiedCustomerIds = array();
 		
 		$fromDate = self::startOfDay(strtotime($from));
 		$toDate = self::endOfDay(strtotime($to));
 		
-		$bugChanges = CustomerManagementDao::findAllBugChanges( $customer_ids, $fromDate, $toDate);
+		$changedBugIds = CustomerManagementDao::findAllChangedBugIds( $customer_ids, $fromDate, $toDate);
 
 		foreach ( $customer_ids as $customer_id ) {
 			
 			$changesForCustomer = array();
-			foreach ( $bugChanges as $bugChange ) {
-				if ( $bugChange['customer_id'] == $customer_id ) {
+			foreach ( $changedBugIds as $changedBugId) {
+				if ( $changedBugId['customer_id'] == $customer_id ) {
 					$changesForCustomer[] = array(
-							'bug' => bug_get( $bugChange['bug_id'])
+							'bug' => bug_get( $changedBugId['bug_id'])
 					);
 				}
 			}
 			
 			if ( count($changesForCustomer) > 0 ) {
-				$text = "The following updates have been made between ${from} and ${to}:\n\n";
-				$text .= "Resolved bugs: ";
 				
+				$counter = 0;
+				$text = '';
 				foreach ( $changesForCustomer as $changeForCustomer) {
+					$counter++;
 					
-					$text .= ' - ' .$changeForCustomer['bug']->summary ."\n";
+					$bugId = $changeForCustomer['bug']->id;
+					
+					$text .= sprintf(plugin_lang_get('email_notification_bug_header'), $changeForCustomer['bug']->id, 
+							$changeForCustomer['bug']->summary , get_enum_element('status', $changeForCustomer['bug']->status));
+					$text .= "\n";
+
+					$reporterName = user_get_name($changeForCustomer['bug']->reporter_id);
+					$reporterEmail = user_get_email($changeForCustomer['bug']->reporter_id);
+					
+					$text .= sprintf(plugin_lang_get('email_notification_bug_reported_by'), $reporterName, $reporterEmail);
+					$text .= "\n";
+
+					$text .= sprintf(plugin_lang_get('email_notification_bug_description'), $changeForCustomer['bug']->description);
+					$text .= "\n\n";
 				}
 				
 				$customer = CustomerManagementDao::getCustomer($customer_id);
 				
 				$email = new EmailData();
 				$email->email = $customer['email'];
-				$email->subject = 'MantisBT notification';
+				$email->subject = sprintf(plugin_lang_get('email_notification_title'), $customer['name'], $from, $to);
 				$email->body = $text;
 				$email->metadata['priority'] = config_get( 'mail_priority' );
 				$email->metadata['charset'] = 'utf-8';
@@ -55,6 +71,8 @@ class CustomerNotifier {
 				$notifiedCustomerIds[] = $customer_id;
 			}
 		}
+		
+		lang_pop();
 	}
 	
 	private static function startOfDay( $timestamp ) {
