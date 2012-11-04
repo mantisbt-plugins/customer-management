@@ -110,6 +110,7 @@ class CustomerManagementPlugin extends MantisPlugin {
 		require_once 'api/ServiceColumn.php';
 		require_once 'api/IsBillableColumn.php';
 		require_once 'api/CustomerFilter.php';
+		require_once 'api/ServiceFilter.php';
 	}
 	
 	function resources() {
@@ -300,7 +301,7 @@ EOD;
 	}
 	
 	function filter_fields() {
-		return array( 'CustomerFilter');
+		return array( 'CustomerFilter', 'ServiceFilter');
 	}
 }
 
