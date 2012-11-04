@@ -190,4 +190,14 @@ class CustomerManagementDao {
 			'where' => "$data_table.service_id = $service_id",
 		);
 	}
+	
+	static function buildFilterArrayForIsBillable( $is_billable ) {
+
+		$bug_table = db_get_table('mantis_bug_table');
+		$data_table = plugin_table('bug_data');
+		return array(
+			'join' => "LEFT JOIN $data_table ON $bug_table.id = $data_table.bug_id",
+			'where' => "$data_table.is_billable = $is_billable",
+		);
+	}
 }
