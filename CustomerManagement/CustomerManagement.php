@@ -97,7 +97,8 @@ class CustomerManagementPlugin extends MantisPlugin {
 				"EVENT_REPORT_BUG" => "save_bug",
 				"EVENT_VIEW_BUG_DETAILS" => "view_bug_details",
 				"EVENT_BUG_DELETED" => "delete_bug",
-				'EVENT_FILTER_COLUMNS' => 'add_columns'
+				"EVENT_FILTER_COLUMNS" => "add_columns",
+				"EVENT_FILTER_FIELDS" => "filter_fields"
 		);
 	}
 	
@@ -108,6 +109,7 @@ class CustomerManagementPlugin extends MantisPlugin {
 		require_once 'api/CustomerColumn.php';
 		require_once 'api/ServiceColumn.php';
 		require_once 'api/IsBillableColumn.php';
+		require_once 'api/CustomerFilter.php';
 	}
 	
 	function resources() {
@@ -295,6 +297,10 @@ EOD;
 
 	function add_columns() {
 		return array( 'CustomerColumn', 'ServiceColumn', 'IsBillableColumn' );
+	}
+	
+	function filter_fields() {
+		return array( 'CustomerFilter');
 	}
 }
 
