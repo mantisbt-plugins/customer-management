@@ -145,6 +145,11 @@ class CustomerManagementDao {
 		$rows = self::toArray(db_query_bound('SELECT * FROM ' . plugin_table('customer') . ' WHERE id = ?', array( $customerId) ));
 		return self::first($rows, null);
 	}
+	
+	static function getGroup( $groupId ) {
+		$rows = self::toArray(db_query_bound('SELECT * FROM ' . plugin_table('group') . ' WHERE id = ?', array( $groupId) ));
+		return self::first($rows, null);
+	}
 
 	static function getGroupForCustomer( $customerId ) {
 		$rows = self::toArray(db_query_bound('
@@ -187,6 +192,17 @@ class CustomerManagementDao {
 		return array(
 			'join' => "LEFT JOIN $data_table ON $bug_table.id = $data_table.bug_id",
 			'where' => "$data_table.customer_id = $customer_id",
+		);
+	}
+	
+	static function buildFilterArrayForCustomerGroup( $group_id) {
+
+		$bug_table = db_get_table('mantis_bug_table');
+		$data_table = plugin_table('bug_data');
+		$customer_table = plugin_table('customer');
+		return array(
+			'join' => "LEFT JOIN $data_table ON $bug_table.id = $data_table.bug_id LEFT JOIN $customer_table ON $customer_table.id = $data_table.customer_id",
+			'where' => "$customer_table.customer_group_id = $group_id",
 		);
 	}
 	
