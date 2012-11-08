@@ -94,6 +94,7 @@ class CustomerManagementPlugin extends MantisPlugin {
 				"EVENT_MENU_MANAGE" => "menu_manage",
 				"EVENT_REPORT_BUG_FORM_TOP" => "prepare_bug_report",
 				"EVENT_UPDATE_BUG_FORM" => "prepare_bug_update",
+				"EVENT_UPDATE_BUG_STATUS_FORM" => "prepare_bug_status_update",
 				"EVENT_UPDATE_BUG" => "save_bug",
 				"EVENT_REPORT_BUG" => "save_bug",
 				"EVENT_VIEW_BUG_DETAILS" => "view_bug_details",
@@ -135,6 +136,10 @@ class CustomerManagementPlugin extends MantisPlugin {
 
 	public function prepare_bug_update ( $event, $bug_id ) {
 		$this->prepage_bug_report_internal(false, $bug_id);
+	}
+	
+	public function prepare_bug_status_update( $event, $bug_id ) {
+		$this->prepage_bug_report_internal(true, $bug_id);
 	}
 	
 	private function prepage_bug_report_internal( $verticalLayout, $bug_id = 0 ) {
