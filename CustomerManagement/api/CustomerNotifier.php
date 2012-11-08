@@ -23,6 +23,8 @@ class CustomerNotifier {
 		
 		$changedBugIds = CustomerManagementDao::findAllChangedBugIds( $customer_ids, $fromDate, $toDate);
 
+		$dateFormat = config_get( 'short_date_format' );
+		
 		foreach ( $customer_ids as $customer_id ) {
 			
 			$changesForCustomer = array();
@@ -45,7 +47,8 @@ class CustomerNotifier {
 					
 					$text .= $counter .'. ';
 					$text .= sprintf(plugin_lang_get('email_notification_bug_header'), $changeForCustomer['bug']->id, 
-							$changeForCustomer['bug']->summary , get_enum_element('status', $changeForCustomer['bug']->status));
+							$changeForCustomer['bug']->summary , date( $dateFormat, $changeForCustomer['bug']->date_submitted ),
+							get_enum_element('status', $changeForCustomer['bug']->status));
 					$text .= "\n";
 
 					$reporterName = user_get_name($changeForCustomer['bug']->reporter_id);

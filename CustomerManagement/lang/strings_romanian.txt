@@ -17,6 +17,6 @@
 
 
 $s_plugin_CustomerManagement_email_notification_title = 'Raport activitati pentru %s in %s - %s';
-$s_plugin_CustomerManagement_email_notification_bug_header = 'Task %s : %s | Status: %s';
+$s_plugin_CustomerManagement_email_notification_bug_header = 'Task %s : %s | %s | Status: %s';
 $s_plugin_CustomerManagement_email_notification_bug_reported_by = 'Inregistrat de %s <%s>';
 $s_plugin_CustomerManagement_email_notification_bug_description = 'Descriere: %s';
