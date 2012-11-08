@@ -98,7 +98,7 @@ var CustomerManagementBugUi = function(customerIdToServiceId) {
 	this.customerIdToServiceId = customerIdToServiceId;
 };
 
-CustomerManagementBugUi.prototype.init = function() {
+CustomerManagementBugUi.prototype.init = function(options) {
 	
 	var that = this;
 	
@@ -123,4 +123,15 @@ CustomerManagementBugUi.prototype.init = function() {
 	
 	jQuery('#cm_plugin_customer_id').change(updateBillableField);
 	jQuery('#cm_plugin_service_id').change(updateBillableField);
+	
+	if ( options.prependCustomerName ) {
+		jQuery('#cm_plugin_customer_id').parents('form').submit(function() {
+			var customerName = jQuery('#cm_plugin_customer_id').find(':selected').text();
+			if ( !customerName )
+				return;
+			var summaryField = jQuery(this).find('[name=summary]');
+			var oldSummary = summaryField.val();
+			summaryField.val('['+customerName+'] ' + oldSummary);
+		});
+	}
 }

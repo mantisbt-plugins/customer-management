@@ -83,7 +83,8 @@ class CustomerManagementPlugin extends MantisPlugin {
 				"manage_customers_threshold" => ADMINISTRATOR,
 				"view_customer_fields_threshold" => DEVELOPER,
 				"edit_customer_fields_threshold" => DEVELOPER,
-				"email_notification_language" => "english"
+				"email_notification_language" => "english",
+				"auto_prepend_customer_name_to_summary" => OFF
 		);
 	}
 
@@ -178,6 +179,7 @@ class CustomerManagementPlugin extends MantisPlugin {
 		}
 		
 		$customersToServicesJson = json_encode( $customersToServices );
+		$prependCustomerName = ( $bug_id === 0  && plugin_config_get('auto_prepend_customer_name_to_summary') ) ;
 		
 		if ( $verticalLayout ) {
 		
@@ -235,7 +237,7 @@ EOD;
 		$row .= <<<EOD
 <script type="text/javascript">
 var customerManagementBugUi = new CustomerManagementBugUi($customersToServicesJson);
-customerManagementBugUi.init();
+customerManagementBugUi.init({'prependCustomerName' : '$prependCustomerName'});
 </script>		
 EOD;
 		
