@@ -146,6 +146,15 @@ class CustomerManagementDao {
 		return self::first($rows, null);
 	}
 
+	static function getGroupForCustomer( $customerId ) {
+		$rows = self::toArray(db_query_bound('
+				SELECT g.* FROM ' . plugin_table('group') . ' g
+				LEFT JOIN ' . plugin_table('customer') . ' c
+				ON c.customer_group_id = g.id
+				WHERE c.id = ?', array( $customerId) ));
+		return self::first($rows, null);
+	}
+
 	static function getService( $serviceId ) {
 		$rows = self::toArray(db_query_bound('SELECT * FROM ' . plugin_table('service') . ' WHERE id = ?', array( $serviceId) ));
 		return self::first($rows, null);
