@@ -64,7 +64,6 @@ class CustomerManagementDao {
 	}
 	
 	static function deleteService( $serviceId ) {
-		error_log("deleting service $serviceId");
 		db_query_bound('DELETE FROM ' . plugin_table('customers_to_services') . ' WHERE service_id = ?', array( $serviceId ) );
 		return db_query_bound('DELETE FROM ' . plugin_table('service') . ' WHERE id = ? ', array ( $serviceId ));
 	}

@@ -260,8 +260,6 @@ EOD;
 		$service_id = gpc_get_int('cm_plugin_service_id', null);
 		$is_billable = CustomerManagementDao::isServiceBillable( $customer_id, $service_id );
 		
-		error_log("Saving");
-		
 		if ( $customer_id )
 			CustomerManagementDao::saveBugData($p_bug_id, $customer_id, $service_id, $is_billable );
 		
