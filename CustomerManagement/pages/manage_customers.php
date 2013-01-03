@@ -84,7 +84,7 @@ $customers = CustomerManagementDao::findAllCustomers();
 		<table class="width50">
 			<thead>
 				<tr <?php echo helper_alternate_class() ?>>
-					<th>-</th>
+					<th><input type="checkbox" class="email-select-all"/></th>
 					<th>Name</th>
 					<th>Group</th>
 					<th>Services</th>
@@ -133,8 +133,13 @@ $customers = CustomerManagementDao::findAllCustomers();
 				<tr <?php echo helper_alternate_class() ?>>
 					<td colspan="5">
 						<a href="#" class="customer-edit"><?php echo plugin_lang_get('add_new_customer'); ?></a>
+						<hr />
+						<label><?php echo plugin_lang_get('date_from'); ?></label>
+						<input type="text" class="datepicker" name="from"/>
+						<label><?php echo plugin_lang_get('date_to'); ?></label>
+						<input type="text" class="datepicker" name="to"/>
+
 						<a href="#" class="email-send"><?php echo plugin_lang_get('send_email_notifications'); ?></a>
-						( <a href="#" class="email-select-all"><?php echo lang_get('select_all'); ?></a> )
 					</td>
 				</tr>
 			</tbody>
@@ -171,6 +176,9 @@ $customers = CustomerManagementDao::findAllCustomers();
 jQuery(document).ready(function($) {
 
 	$('#tabs').tabs();
+
+	// use ISO 8601 date format ; we don't have a proper bridge to the MantisBT date format yet
+	$('.datepicker').datepicker( {'maxDate': 0, 'dateFormat' : 'yy-mm-dd'});
 
 	var api = new CustomerManagement({
 		'entryPoint' : '<?php echo plugin_page('manage_customers_actions') ; ?>',
@@ -320,17 +328,12 @@ jQuery(document).ready(function($) {
 	$('.email-send').click(function() {
 
 		var ids = [];
-		var notification = $('<div>').attr('title', 'Email notification')
-							.append($('<p>').text('<?php echo plugin_lang_get('email_notification_info'); ?>'));
-		var customerList = $('<ol>');
 		
 		$('.emailSelector:checked').each(function(index, value) {
 
 			var customerId = $(value).data('customer-id');
-			if ( customerId ) {
+			if ( customerId )
 				ids.push(customerId);
-				customerList.append($("<li>").text($(value).data('customer-name')));
-			}
 		});
 
 		if ( ids.length == 0 )  {
@@ -338,70 +341,45 @@ jQuery(document).ready(function($) {
 			return;
 		}
 
-		customerList.appendTo(notification);
+		var from = $('#customers').find('[name=from]');
+		var to = $('#customers').find('[name=to]');
 
-		customerList.append($('<label>').text("<?php echo plugin_lang_get('date_from'); ?>"));
-		customerList.append($('<input>').attr({
-			'type' : 'text',
-			'class' : 'datepicker',
-			'name' : 'from'
-		}));
+		var errors = [];
+		if ( !from.val() )
+			errors.push('<?php echo plugin_lang_get('notification_from_date_required'); ?>');
+		if ( !to.val() )
+			errors.push('<?php echo plugin_lang_get('notification_to_date_required'); ?>');
+
+		if ( errors.length != 0 ) {
+			ui.error(errors.join("\n"));
+			return;
+		}
+
+		var fromAsDate = new Date(from.val());
+		var toAsDate = new Date(to.val());
+
+		if ( fromAsDate > toAsDate ) {
+			ui.error('<?php echo plugin_lang_get('notification_from_date_must_be_before_end_date'); ?>');
+			return;
+		}
 		
-		customerList.append($('<label>').text("<?php echo plugin_lang_get('date_to'); ?>"));
-		customerList.append($('<input>').attr({
-			'type' : 'text',
-			'class' : 'datepicker',
-			'name' : 'to'
-		}));
+		if ( !ui.confirm('<?php echo plugin_lang_get('send_notification_confirm'); ?>') )
+			return;
 
-		customerList.append($('<input>').attr({
-			'type': 'button',
-			'value': '<?php echo plugin_lang_get('send_notification'); ?>'
-		}).click(function() {
-			var from = notification.find('[name=from]');
-			var to = notification.find('[name=to]');
+		var errorWithDefault = function(message) {
+			if ( !message) 
+				message = '<?php echo plugin_lang_get('unspecified_error') ?>';
 
-			var errors = [];
-			if ( !from.val() )
-				errors.push('<?php echo plugin_lang_get('notification_from_date_required'); ?>');
-			if ( !to.val() )
-				errors.push('<?php echo plugin_lang_get('notification_to_date_required'); ?>');
+			ui.error(message);
+		}
 
-			if ( errors.length != 0 ) {
-				ui.error(errors.join("\n"));
-				return;
-			}
-
-			var fromAsDate = new Date(from.val());
-			var toAsDate = new Date(to.val());
-
-			if ( fromAsDate > toAsDate ) {
-				ui.error('<?php echo plugin_lang_get('notification_from_date_must_be_before_end_date'); ?>');
-				return;
-			}
-			
-			if ( !ui.confirm('<?php echo plugin_lang_get('send_notification_confirm'); ?>') )
-				return;
-
-			var errorWithDefault = function(message) {
-				if ( !message) 
-					message = '<?php echo plugin_lang_get('unspecified_error') ?>';
-
-				ui.error(message);
-			}
-
-			var payload = {
-				'from' : from.val(),
-				'to' : to.val(),
-				'customer_id[]' : ids
-			}
-			
-			api.sendNotification(payload, ui.error, errorWithDefault);
-		}));
+		var payload = {
+			'from' : from.val(),
+			'to' : to.val(),
+			'customer_id[]' : ids
+		}
 		
-		notification.dialog( {'width' : '360px'} );
-		// use ISO 8601 date format ; we don't have a proper bridge to the MantisBT date format yet
-		notification.find('.datepicker').datepicker( {'maxDate': 0, 'dateFormat' : 'yy-mm-dd'});
+		api.sendNotification(payload, function() { window.location.reload() }, errorWithDefault);
 
 		return false;
 	});
