@@ -34,8 +34,8 @@ $customers = CustomerManagementDao::findAllCustomers();
 		<table class="width50">
 			<thead>
 				<tr <?php echo helper_alternate_class() ?>>
-					<th>Name</th>
-					<th>Actions</th>
+					<th><?php echo plugin_lang_get('name') ?></th>
+					<th><?php echo plugin_lang_get('actions') ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -59,8 +59,8 @@ $customers = CustomerManagementDao::findAllCustomers();
 		<table class="width50">
 			<thead>
 				<tr <?php echo helper_alternate_class() ?>>
-					<th>Name</th>
-					<th>Actions</th>
+					<th><?php echo plugin_lang_get('name') ?></th>
+					<th><?php echo plugin_lang_get('actions') ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -85,10 +85,10 @@ $customers = CustomerManagementDao::findAllCustomers();
 			<thead>
 				<tr <?php echo helper_alternate_class() ?>>
 					<th><input type="checkbox" class="email-select-all"/></th>
-					<th>Name</th>
-					<th>Group</th>
-					<th>Services</th>
-					<th>Actions</th>
+					<th><?php echo plugin_lang_get('name') ?></th>
+					<th><?php echo plugin_lang_get('group') ?></th>
+					<th><?php echo plugin_lang_get('services') ?></th>
+					<th><?php echo plugin_lang_get('actions') ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -149,24 +149,24 @@ $customers = CustomerManagementDao::findAllCustomers();
 <form id="group-form" style="display: none" title="<?php echo plugin_lang_get('edit_group'); ?>">
 	<input type="hidden" name="id" />
 	<br />
-	<label for="name">Name</label> <input type="text" name="name"/> <br />
+	<label for="name"><?php echo plugin_lang_get('name') ?></label> <input type="text" name="name"/> <br />
 </form>
 <form id="service-form" style="display: none" title="<?php echo plugin_lang_get('edit_service'); ?>">
 	<input type="hidden" name="id" />
 	<br />
-	<label for="name">Name</label> <input type="text" name="name"/> <br />
+	<label for="name"><?php echo plugin_lang_get('name') ?></label> <input type="text" name="name"/> <br />
 </form>
 <form id="customer-form" style="display: none" title="<?php echo plugin_lang_get('edit_customer'); ?>">
 	<input type="hidden" name="id" />
 	<br />
-	<label for="name">Name</label> <input type="text" name="name"/> <br />
-	<label for="name">Email</label> <input type="text" name="email"/> <br />
-	<label for="customer_group_id">Group</label> <select name="customer_group_id">
+	<label for="name"><?php echo plugin_lang_get('name') ?></label> <input type="text" name="name"/> <br />
+	<label for="name"><?php echo plugin_lang_get('email') ?></label> <input type="text" name="email"/> <br />
+	<label for="customer_group_id"><?php echo plugin_lang_get('group') ?></label> <select name="customer_group_id">
 	<?php foreach ( CustomerManagementDao::findAllGroups() as $group ) { ?>
 		<option value="<?php echo $group['id']; ?>"><?php echo $group['name']?></option>
 	<?php } ?>
 	</select> <br />
-	<label for="service_id[]">Services</label> <select name="service_id[]" multiple="multiple">
+	<label for="service_id[]"><?php echo plugin_lang_get('services') ?></label> <select name="service_id[]" multiple="multiple">
 	<?php foreach ( CustomerManagementDao::findAllServices() as $service ) { ?>
 		<option value="<?php echo $service['id']; ?>"><?php echo $service['name']?></option>
 	<?php } ?>	
@@ -378,7 +378,7 @@ jQuery(document).ready(function($) {
 		
 		api.previewNotification(payload, function(emails) { 
 			var prop;
-			var notification = $('<div>').attr('title', 'Email preview'); // TODO translate
+			var notification = $('<div>').attr('title', '<?php echo plugin_lang_get('email_preview') ?>');
 
 			for ( prop in emails ) {
 
@@ -397,8 +397,8 @@ jQuery(document).ready(function($) {
 			
 
 			var actionBar = $('<div>').attr('class','action-bar');
-			$('<a>').attr('href',printUrl).attr('target','_blank').text('Print').appendTo(actionBar);
-			$('<a>').attr('class', 'email-send').text('Send').click(function() {
+			$('<a>').attr('href',printUrl).attr('target','_blank').text('<?php echo plugin_lang_get('print') ?>').appendTo(actionBar);
+			$('<a>').attr('class', 'email-send').text('<?php echo plugin_lang_get('send') ?>').click(function() {
 				if ( !ui.confirm('<?php echo plugin_lang_get('send_notification_confirm'); ?>') )
 					return;
 
