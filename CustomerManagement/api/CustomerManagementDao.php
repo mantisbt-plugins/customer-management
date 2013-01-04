@@ -106,13 +106,13 @@ class CustomerManagementDao {
 				VALUES (?,?)', array($id, $serviceId));
 	}
 	
-	static function saveBugData( $bugId, $customerId, $serviceId, $isBillable ) {
+	static function saveBugData( $bugId, $customerId, $serviceId, $isBillable, $invoice ) {
 		
 		self::deleteBugData($bugId);
 		db_query_bound('
 				INSERT INTO ' . plugin_table('bug_data') . ' 
-				(bug_id, customer_id, service_id, is_billable) 
-				VALUES(?, ?, ?, ?)', array( $bugId, $customerId, $serviceId, $isBillable ));
+				(bug_id, customer_id, service_id, is_billable, invoice) 
+				VALUES(?, ?, ?, ?, ?)', array( $bugId, $customerId, $serviceId, $isBillable, $invoice ));
 	}
 
 	static function deleteBugData( $bugId ) {

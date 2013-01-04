@@ -43,6 +43,7 @@ $s_plugin_CustomerManagement_service = 'Service';
 $s_plugin_CustomerManagement_customers = 'Customers';
 $s_plugin_CustomerManagement_customer = 'Customer';
 $s_plugin_CustomerManagement_customer_group = 'Customer Group';
+$s_plugin_CustomerManagement_invoice = 'Invoice';
 $s_plugin_CustomerManagement_is_billable = 'Billable';
 $s_plugin_CustomerManagement_email = 'Email';
 $s_plugin_CustomerManagement_send_email_notifications = 'Send email notifications';

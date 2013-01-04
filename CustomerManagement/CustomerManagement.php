@@ -73,6 +73,9 @@ class CustomerManagementPlugin extends MantisPlugin {
 					service_id I NOTNULL UNSIGNED,
 					is_billable L NOTNULL
 				")),
+				array("AddColumnSQL", array(plugin_table("bug_data"),"
+					invoice C(128)
+				"))
 				
 		);
 	}
@@ -84,7 +87,8 @@ class CustomerManagementPlugin extends MantisPlugin {
 				"view_customer_fields_threshold" => DEVELOPER,
 				"edit_customer_fields_threshold" => DEVELOPER,
 				"email_notification_language" => "english",
-				"auto_prepend_customer_name_to_summary" => OFF
+				"auto_prepend_customer_name_to_summary" => OFF,
+				"display_invoice_field_status_threshold" => RESOLVED
 		);
 	}
 
@@ -152,6 +156,8 @@ class CustomerManagementPlugin extends MantisPlugin {
 		$customer_id = 0;
 		$service_id = 0;
 		$is_billable = 0;
+		$invoice = '';
+		$show_invoice = false;
 		
 		if ( $bug_id ) {
 			$bug_data = CustomerManagementDao::getBugData( $bug_id );
@@ -159,20 +165,26 @@ class CustomerManagementPlugin extends MantisPlugin {
 				$customer_id = $bug_data['customer_id'];
 				$service_id = $bug_data['service_id'];
 				$is_billable = $bug_data['is_billable'] == 1;
+				$invoice = $bug_data['invoice'];
+				$bug = bug_get( $bug_id );
+				$show_invoice = $bug->status >= plugin_config_get('display_invoice_field_status_threshold');
 			}
 		}
 		
 		$customer_label = plugin_lang_get('customer');
 		$service_label = plugin_lang_get('service');
 		$is_billable_label = plugin_lang_get('is_billable');
+		$invoice_label = plugin_lang_get('invoice');
 		
 		$class = helper_alternate_class();
 		$class2 = helper_alternate_class();
 		$class3 = helper_alternate_class();
+		$class4 = helper_alternate_class();
 
 		$customer_select = CustomerManagementViewHelper::getCustomerSelect( $customer_id);
 		$service_select = CustomerManagementViewHelper::getServiceSelect( $service_id );
 		$is_billable_checkbox = CustomerManagementViewHelper::getBillableCheckbox( $is_billable);
+		$invoice_input = CustomerManagementViewHelper::getInvoiceInput( $invoice);
 		
 		$customers = CustomerManagementDao::findAllCustomers();
 		$customersToServices = array();
@@ -216,6 +228,19 @@ class CustomerManagementPlugin extends MantisPlugin {
 	</td>
 </tr>
 EOD;
+		
+			if ( $show_invoice ) {
+				$row .= <<<EOD
+<tr $class4>
+	<td class="category" width="30%">
+		$invoice_label
+	</td>
+	<td width="70%">
+		$invoice_input
+	</td>
+</tr>
+EOD;
+			}
 		} else {
 			$row = <<<EOD
 <tr $class>
@@ -239,6 +264,30 @@ EOD;
 	</td>
 </tr>
 EOD;
+			if ( $show_invoice ) {
+				$row .= <<<EOD
+<tr $class2>
+	<td class="category">
+		$invoice_label
+	</td>
+	<td>
+		$invoice_input
+	</td>
+	<td class="category">
+		&nbsp;
+	</td>
+	<td>
+		&nbsp;
+	</td>
+	<td class="category">
+		&nbsp;
+	</td>
+	<td>
+		&nbsp;
+	</td>
+</tr>
+EOD;
+			}
 		}
 		
 		$row .= <<<EOD
@@ -261,9 +310,10 @@ EOD;
 		$customer_id = gpc_get_int('cm_plugin_customer_id', null);
 		$service_id = gpc_get_int('cm_plugin_service_id', null);
 		$is_billable = CustomerManagementDao::isServiceBillable( $customer_id, $service_id );
+		$invoice = gpc_get_string('cm_plugin_invoice', null);
 		
 		if ( $customer_id )
-			CustomerManagementDao::saveBugData($p_bug_id, $customer_id, $service_id, $is_billable );
+			CustomerManagementDao::saveBugData($p_bug_id, $customer_id, $service_id, $is_billable, $invoice );
 		
 		return $p_bug_data;
 	}
@@ -278,14 +328,18 @@ EOD;
 			return;
 		
 		$class = helper_alternate_class();
+		$class2 = helper_alternate_class();
 		$customer_label = plugin_lang_get('customer');
 		$service_label = plugin_lang_get('service');
 		$is_billable_label = plugin_lang_get('is_billable');
+		$invoice_label = plugin_lang_get('invoice');
+		
+		$show_invoice = bug_get_field( $p_bug_id, 'status') >= plugin_config_get('display_invoice_field_status_threshold');
 		
 		$customer = CustomerManagementDao::getCustomer( $bug_data['customer_id']);
 		$service = CustomerManagementDao::getService( $bug_data['service_id']);
 		$is_billable = $bug_data['is_billable'] ? lang_get('yes') : lang_get('no');
-
+		
 		if ( $bug_data ) {
 			$row = <<<EOD
 <tr $class>
@@ -297,6 +351,18 @@ EOD;
 	<td>$is_billable</td>
 </tr>
 EOD;
+			if ( $show_invoice ) {
+				$row .= <<<EOD
+<tr $class>
+	<td class="category">$invoice_label</td>
+	<td>${bug_data['invoice']}</td>
+	<td class="category">&nbsp;</td>
+	<td>&nbsp;</td>
+	<td class="category">&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>				
+EOD;
+			}
 			echo $row;
 		}
 	}

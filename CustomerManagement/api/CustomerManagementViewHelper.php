@@ -33,4 +33,8 @@ class CustomerManagementViewHelper {
  		
 		return '<input type="checkbox" name="cm_plugin_is_billable" id="cm_plugin_is_billable" disabled="disabled" '.$checked_attr .'>';
 	}
+	
+	static function getInvoiceInput($invoice = '') {
+		return '<input type="text" name="cm_plugin_invoice" id="cm_plugin_invoice" value="' . string_display_line($invoice) . '">';
+	}
 }
