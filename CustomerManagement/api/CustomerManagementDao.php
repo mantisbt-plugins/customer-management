@@ -200,7 +200,7 @@ class CustomerManagementDao {
 		$data_table = plugin_table('bug_data');
 		$customer_table = plugin_table('customer');
 		return array(
-			'join' => "LEFT JOIN $data_table ON $bug_table.id = $data_table.bug_id LEFT JOIN $customer_table ON $customer_table.id = $data_table.customer_id",
+			'join' => "LEFT JOIN $data_table dta ON $bug_table.id = dta.bug_id LEFT JOIN $customer_table ON $customer_table.id = dta.customer_id",
 			'where' => "$customer_table.customer_group_id = $group_id",
 		);
 	}
@@ -210,8 +210,8 @@ class CustomerManagementDao {
 		$bug_table = db_get_table('mantis_bug_table');
 		$data_table = plugin_table('bug_data');
 		return array(
-			'join' => "LEFT JOIN $data_table ON $bug_table.id = $data_table.bug_id",
-			'where' => "$data_table.service_id = $service_id",
+			'join' => "LEFT JOIN $data_table dtb ON $bug_table.id = dtb.bug_id",
+			'where' => "dtb.service_id = $service_id",
 		);
 	}
 	
@@ -220,8 +220,8 @@ class CustomerManagementDao {
 		$bug_table = db_get_table('mantis_bug_table');
 		$data_table = plugin_table('bug_data');
 		return array(
-			'join' => "LEFT JOIN $data_table ON $bug_table.id = $data_table.bug_id",
-			'where' => "$data_table.is_billable = $is_billable",
+			'join' => "LEFT JOIN $data_table dtc ON $bug_table.id = dtc.bug_id",
+			'where' => "dtc.is_billable = $is_billable",
 		);
 	}
 	
@@ -230,8 +230,8 @@ class CustomerManagementDao {
 		$bug_table = db_get_table('mantis_bug_table');
 		$data_table = plugin_table('bug_data');
 		return array(
-			'join' => "LEFT JOIN $data_table ON $bug_table.id = $data_table.bug_id",
-			'where' => "$data_table.invoice = '$invoice'",
+			'join' => "LEFT JOIN $data_table dtd ON $bug_table.id = dtd.bug_id",
+			'where' => "dtd.invoice = '$invoice'"
 		);
 	}
 }
