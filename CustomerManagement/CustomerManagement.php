@@ -120,6 +120,8 @@ class CustomerManagementPlugin extends MantisPlugin {
 		require_once 'api/CustomerGroupFilter.php';
 		require_once 'api/ServiceFilter.php';
 		require_once 'api/IsBillableFilter.php';
+		require_once 'api/InvoiceColumn.php';
+		require_once 'api/InvoiceFilter.php';
 	}
 	
 	function resources() {
@@ -373,11 +375,11 @@ EOD;
 	}
 
 	function add_columns() {
-		return array( 'CustomerColumn', 'ServiceColumn', 'IsBillableColumn', 'CustomerGroupColumn' );
+		return array( 'CustomerColumn', 'ServiceColumn', 'IsBillableColumn', 'CustomerGroupColumn', 'InvoiceColumn' );
 	}
 	
 	function filter_fields() {
-		return array( 'CustomerFilter', 'ServiceFilter', 'IsBillableFilter', 'CustomerGroupFilter');
+		return array( 'CustomerFilter', 'ServiceFilter', 'IsBillableFilter', 'CustomerGroupFilter', 'InvoiceFilter');
 	}
 }
 
