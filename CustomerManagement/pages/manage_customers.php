@@ -139,7 +139,7 @@ $customers = CustomerManagementDao::findAllCustomers();
 						<label><?php echo plugin_lang_get('date_to'); ?></label>
 						<input type="text" class="datepicker" name="to"/>
 
-						<a href="#" class="email-send"><?php echo plugin_lang_get('send_email_notifications'); ?></a>
+						<a href="#" class="email-preview"><?php echo plugin_lang_get('preview_email_notifications'); ?></a>
 					</td>
 				</tr>
 			</tbody>
@@ -325,7 +325,7 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 
-	$('.email-send').click(function() {
+	$('.email-preview').click(function() {
 
 		var ids = [];
 		
@@ -362,9 +362,6 @@ jQuery(document).ready(function($) {
 			ui.error('<?php echo plugin_lang_get('notification_from_date_must_be_before_end_date'); ?>');
 			return;
 		}
-		
-		if ( !ui.confirm('<?php echo plugin_lang_get('send_notification_confirm'); ?>') )
-			return;
 
 		var errorWithDefault = function(message) {
 			if ( !message) 
@@ -379,7 +376,43 @@ jQuery(document).ready(function($) {
 			'customer_id[]' : ids
 		}
 		
-		api.sendNotification(payload, function() { window.location.reload() }, errorWithDefault);
+		api.previewNotification(payload, function(emails) { 
+			var prop;
+			var notification = $('<div>').attr('title', 'Email preview'); // TODO translate
+
+			for ( prop in emails ) {
+
+				var email = emails[prop];
+
+				$('<h3>').text(email['subject']).appendTo(notification);
+				$('<pre>').text(email['body']).appendTo(notification);
+			}
+
+			var printUrl = '<?php echo plugin_page('print_notifications.php') ?>';
+			printUrl += '&from=' + payload.from;
+			printUrl += '&to=' + payload.to;
+			for ( var index in ids ) {
+				printUrl += '&customer_id[]=' + ids[index];
+			}
+			
+
+			var actionBar = $('<div>').attr('class','action-bar');
+			$('<a>').attr('href',printUrl).attr('target','_blank').text('Print').appendTo(actionBar);
+			$('<a>').attr('class', 'email-send').text('Send').click(function() {
+				if ( !ui.confirm('<?php echo plugin_lang_get('send_notification_confirm'); ?>') )
+					return;
+
+				api.sendNotification(payload, function() {
+					window.location.reload();
+				}, errorWithDefault);
+			
+			}).appendTo(actionBar);
+			actionBar.appendTo(notification);
+ 
+			notification.dialog({ 'width': '80%' });
+
+			
+		}, errorWithDefault);
 
 		return false;
 	});

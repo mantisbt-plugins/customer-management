@@ -119,7 +119,9 @@ class CustomerManagementPlugin extends MantisPlugin {
 	}
 	
 	function resources() {
-		return '<script type="text/javascript" src="' . plugin_file('customer-management.js').'"></script>';
+		return 
+			'<script type="text/javascript" src="' . plugin_file('customer-management.js').'"></script>' .
+			'<link rel="stylesheet" type="text/css" href="' . plugin_file('customer-management.css').'"></link>';
 	}
 	
 	public function menu_manage($event, $user_id) {

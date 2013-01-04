@@ -84,6 +84,28 @@ CustomerManagement.prototype.sendNotification = function(data, success, error) {
 		});
 }
 
+CustomerManagement.prototype.previewNotification = function(data, success, error) {
+	var payload = {'action': 'previewNotification', 'manage_customers_token' : this.csrfToken };
+	
+	jQuery.post(this.entryPoint, jQuery.extend(payload, data) )
+		.done(function(result) {
+			if ( !result ) {
+				error.call();
+				return;
+			}
+			
+			if ( result.status == 'ERROR') {
+				error(result.type + " : " + result.contents);
+				return;
+			}
+			
+			success.call(null, result.contents);
+		})
+		.fail(function(data) {
+			error.call();
+		});
+}
+
 var CustomerManagementUi = {};
 
 CustomerManagementUi.confirm = function(message) {
