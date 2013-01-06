@@ -79,7 +79,6 @@ class CustomerManagementPlugin extends MantisPlugin {
 				
 		);
 	}
-	
 
 	function config() {
 		return array(
@@ -390,4 +389,3 @@ EOD;
 		return array( 'CustomerFilter', 'ServiceFilter', 'IsBillableFilter', 'CustomerGroupFilter', 'InvoiceFilter');
 	}
 }
-
