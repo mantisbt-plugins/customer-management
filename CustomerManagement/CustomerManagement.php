@@ -88,7 +88,8 @@ class CustomerManagementPlugin extends MantisPlugin {
 				"edit_customer_fields_threshold" => DEVELOPER,
 				"email_notification_language" => "english",
 				"auto_prepend_customer_name_to_summary" => OFF,
-				"display_invoice_field_status_threshold" => RESOLVED
+				"display_invoice_field_status_threshold" => ASSIGNED,
+				"require_invoice_field_status_threshold" => RESOLVED
 		);
 	}
 
@@ -162,14 +163,15 @@ class CustomerManagementPlugin extends MantisPlugin {
 		$show_invoice = false;
 		
 		if ( $bug_id ) {
+			$bug = bug_get( $bug_id );
+			$show_invoice = $bug->status >= plugin_config_get('display_invoice_field_status_threshold');
+			
 			$bug_data = CustomerManagementDao::getBugData( $bug_id );
 			if ( $bug_data ) {
 				$customer_id = $bug_data['customer_id'];
 				$service_id = $bug_data['service_id'];
 				$is_billable = $bug_data['is_billable'] == 1;
 				$invoice = $bug_data['invoice'];
-				$bug = bug_get( $bug_id );
-				$show_invoice = $bug->status >= plugin_config_get('display_invoice_field_status_threshold');
 			}
 		}
 		
@@ -314,9 +316,15 @@ EOD;
 		$is_billable = CustomerManagementDao::isServiceBillable( $customer_id, $service_id );
 		$invoice = gpc_get_string('cm_plugin_invoice', null);
 		
-		if ( $customer_id )
+		if ( $customer_id ) {
+			if ( $is_billable && is_blank($invoice) 
+					&& $p_bug_data->status >= plugin_config_get('require_invoice_field_status_threshold') ) {
+				error_parameters(plugin_lang_get('invoice'));
+				trigger_error(ERROR_EMPTY_FIELD, ERROR);
+			}
 			CustomerManagementDao::saveBugData($p_bug_id, $customer_id, $service_id, $is_billable, $invoice );
-		
+		}
+			
 		return $p_bug_data;
 	}
 	public function view_bug_details( $p_event, $p_bug_id ) {
