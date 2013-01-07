@@ -316,12 +316,19 @@ EOD;
 		$invoice = gpc_get_string('cm_plugin_invoice', null);
 		
 		if ( $customer_id ) {
+			
 			if ( $is_billable && is_blank($invoice) 
 					&& $p_bug_data->status >= plugin_config_get('require_invoice_field_status_threshold') ) {
 				error_parameters(plugin_lang_get('invoice'));
 				trigger_error(ERROR_EMPTY_FIELD, ERROR);
 			}
+			
+			$bug_data = CustomerManagementDao::getBugData( $p_bug_id );
+			
 			CustomerManagementDao::saveBugData($p_bug_id, $customer_id, $service_id, $is_billable, $invoice );
+
+			if ( $bug_data )
+				history_log_event_direct($p_bug_id, 'invoice', $bug_data['invoice'], $invoice);
 		}
 			
 		return $p_bug_data;
