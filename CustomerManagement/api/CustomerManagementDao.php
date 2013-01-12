@@ -137,7 +137,9 @@ class CustomerManagementDao {
 				SELECT COUNT(*) AS count FROM ' . plugin_table('customers_to_services') . ' 
 				WHERE customer_id = ? AND service_id = ?', array ( $customerId, $serviceId) ));
 		
-		return $res[0]['count'] == 0;
+		$count = $res['count'];
+		
+		return $count == 0;
 	}
 	
 	static function getCustomer( $customerId ) {
