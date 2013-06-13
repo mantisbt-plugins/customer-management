@@ -1,0 +1,65 @@
+<?php
+# Copyright (c) 2012 Robert Munteanu (robert@lmn.ro)
+
+# Customer management for MantisBT is free software: 
+# you can redistribute it and/or modify it under the terms of the GNU
+# General Public License as published by the Free Software Foundation, 
+# either version 2 of the License, or (at your option) any later version.
+#
+# Customer management plugin for MantisBT is distributed in the hope 
+# that it will be useful, but WITHOUT ANY WARRANTY; without even the 
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Customer management plugin for MantisBT.  
+# If not, see <http://www.gnu.org/licenses/>.
+
+$s_plugin_CustomerManagement_manage_customers = 'Gestión de clientes';
+$s_plugin_CustomerManagement_edit = 'Editar';
+$s_plugin_CustomerManagement_delete = 'Eliminar';
+$s_plugin_CustomerManagement_unable_to_delete_group_has_customers = 'No se ha podido eliminar el grupo debido a que existe al menos un cliente asociado a él.';
+$s_plugin_CustomerManagement_unable_to_delete_service_has_customers = 'No se ha podido eliminar el servicio debido a que existe al menos un cliente asociado a él.';
+$s_plugin_CustomerManagement_confirm_delete_group = '¿Estás seguro de que quieres eliminar el grupo de clientes?';
+$s_plugin_CustomerManagement_confirm_delete_service = '¿Estás seguro de que quieres eliminar el servicio?';
+$s_plugin_CustomerManagement_confirm_delete_customer = '¿Estás sesguro de que quieres eliminar el cliente?';
+$s_plugin_CustomerManagement_add_new_group = 'Añadir nuevo grupo';
+$s_plugin_CustomerManagement_add_new_service = 'Añadir nuevo servicio';
+$s_plugin_CustomerManagement_add_new_customer = 'Añadir nuevo cliente';
+$s_plugin_CustomerManagement_name = 'Nombre';
+$s_plugin_CustomerManagement_group = 'Grupo';
+$s_plugin_CustomerManagement_actions = 'Acciones';
+$s_plugin_CustomerManagement_save  = 'Guardar';
+$s_plugin_CustomerManagement_cancel = 'Cancelar';
+$s_plugin_CustomerManagement_print = 'Imprimir';
+$s_plugin_CustomerManagement_send = 'Enviar';
+$s_plugin_CustomerManagement_email_preview = 'Previsualización del e-mail';
+$s_plugin_CustomerManagement_edit_group = 'Editar grupo';
+$s_plugin_CustomerManagement_edit_service = 'Editar servicio';
+$s_plugin_CustomerManagement_edit_customer = 'Editar cliente';
+$s_plugin_CustomerManagement_customer_groups = 'Grupos de clientes';
+$s_plugin_CustomerManagement_services = 'Servicios';
+$s_plugin_CustomerManagement_service = 'Servicio';
+$s_plugin_CustomerManagement_customers = 'Clientes';
+$s_plugin_CustomerManagement_customer = 'Cliente';
+$s_plugin_CustomerManagement_customer_group = 'Grupo del cliente';
+$s_plugin_CustomerManagement_invoice = 'Factura';
+$s_plugin_CustomerManagement_is_billable = 'Facturable';
+$s_plugin_CustomerManagement_email = 'E-mail';
+$s_plugin_CustomerManagement_send_email_notifications = 'Enviar notificaciones por e-mail';
+$s_plugin_CustomerManagement_preview_email_notifications = 'Previsualizar notificaciones por e-mail';
+$s_plugin_CustomerManagement_no_entries_selected_for_notification = 'No se han seleccionado clientes para la notificación por e-mail. Por favor, selecciona al menos un cliente.';
+$s_plugin_CustomerManagement_email_notification_info = 'Los siguientes clientes serán notificados sobre la actividad en sus tareas relacionadas.';
+$s_plugin_CustomerManagement_date_from = 'De';
+$s_plugin_CustomerManagement_date_to = 'A';
+$s_plugin_CustomerManagement_send_notification = 'Enviar notificación';
+$s_plugin_CustomerManagement_send_notification_confirm = 'Por favor, confirma el envío de la notificación. Esta acción no se puede deshacer.';
+$s_plugin_CustomerManagement_notification_from_date_required = 'Por favor, indica la fecha desde la que obtener los cambios.';
+$s_plugin_CustomerManagement_notification_to_date_required = 'Por favor, indica la fecha hasta la que obtener los cambios.';
+$s_plugin_CustomerManagement_notification_from_date_must_be_before_end_date = 'La fecha inicial debe ser anterior a la final.';
+$s_plugin_CustomerManagement_unspecified_error = 'Se ha producido un error no especificado. Por favor, contacta con el administrador.';
+
+$s_plugin_CustomerManagement_email_notification_title = 'Informe de actividad para %s entre %s y %s';
+$s_plugin_CustomerManagement_email_notification_bug_header = 'Incidencia %s : %s | %s | Estado: %s';
+$s_plugin_CustomerManagement_email_notification_bug_reported_by = 'Informado por %s <%s>';
+$s_plugin_CustomerManagement_email_notification_bug_description = 'Descripción: %s';
