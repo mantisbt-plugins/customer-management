@@ -1,0 +1,65 @@
+<?php
+# Copyright (c) 2012 Robert Munteanu (robert@lmn.ro)
+
+# Customer management for MantisBT is free software: 
+# you can redistribute it and/or modify it under the terms of the GNU
+# General Public License as published by the Free Software Foundation, 
+# either version 2 of the License, or (at your option) any later version.
+#
+# Customer management plugin for MantisBT is distributed in the hope 
+# that it will be useful, but WITHOUT ANY WARRANTY; without even the 
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Customer management plugin for MantisBT.  
+# If not, see <http://www.gnu.org/licenses/>.
+
+$s_plugin_CustomerManagement_manage_customers = 'Gestió de clients';
+$s_plugin_CustomerManagement_edit = 'Editar';
+$s_plugin_CustomerManagement_delete = 'Eliminar';
+$s_plugin_CustomerManagement_unable_to_delete_group_has_customers = 'No s\'ha pogut eliminar el grup perquè exist com a mínim un client associat.';
+$s_plugin_CustomerManagement_unable_to_delete_service_has_customers = 'No s\'ha pogut eliminar el servei perquè exist com a mínim un client associat.';
+$s_plugin_CustomerManagement_confirm_delete_group = 'Estàs segur què vols eliminar el grup de clients?';
+$s_plugin_CustomerManagement_confirm_delete_service = 'Estàs segur què vols eliminar el servei?';
+$s_plugin_CustomerManagement_confirm_delete_customer = 'Estàs sesgur què vols eliminar el client?';
+$s_plugin_CustomerManagement_add_new_group = 'Afegir nou grup';
+$s_plugin_CustomerManagement_add_new_service = 'Afegir nou servei';
+$s_plugin_CustomerManagement_add_new_customer = 'Afegir nou client';
+$s_plugin_CustomerManagement_name = 'Nom';
+$s_plugin_CustomerManagement_group = 'Grup';
+$s_plugin_CustomerManagement_actions = 'Accions';
+$s_plugin_CustomerManagement_save  = 'Guardar';
+$s_plugin_CustomerManagement_cancel = 'Cancel·lar';
+$s_plugin_CustomerManagement_print = 'Imprimir';
+$s_plugin_CustomerManagement_send = 'Enviar';
+$s_plugin_CustomerManagement_email_preview = 'Previsualització del e-mail';
+$s_plugin_CustomerManagement_edit_group = 'Editar grup';
+$s_plugin_CustomerManagement_edit_service = 'Editar servei';
+$s_plugin_CustomerManagement_edit_customer = 'Editar client';
+$s_plugin_CustomerManagement_customer_groups = 'Grups de clients';
+$s_plugin_CustomerManagement_services = 'Serveis';
+$s_plugin_CustomerManagement_service = 'Servei';
+$s_plugin_CustomerManagement_customers = 'Clients';
+$s_plugin_CustomerManagement_customer = 'Client';
+$s_plugin_CustomerManagement_customer_group = 'Grup del client';
+$s_plugin_CustomerManagement_invoice = 'Factura';
+$s_plugin_CustomerManagement_is_billable = 'Facturable';
+$s_plugin_CustomerManagement_email = 'E-mail';
+$s_plugin_CustomerManagement_send_email_notifications = 'Enviar notificacions per e-mail';
+$s_plugin_CustomerManagement_preview_email_notifications = 'Previsualitzar notificacions per e-mail';
+$s_plugin_CustomerManagement_no_entries_selected_for_notification = 'No hi ha cap client seleccionat per a la notificació per e-mail. Si us plau, selecciona com a mínim un client.';
+$s_plugin_CustomerManagement_email_notification_info = 'Els següents clients seran notificats sobre l\'activitat a les seves tasques relacionades.';
+$s_plugin_CustomerManagement_date_from = 'De';
+$s_plugin_CustomerManagement_date_to = 'A';
+$s_plugin_CustomerManagement_send_notification = 'Enviar notificació';
+$s_plugin_CustomerManagement_send_notification_confirm = 'Si us plau, confirma l\'enviament de la notificació. Aquesta acció no es podrà desfer.';
+$s_plugin_CustomerManagement_notification_from_date_required = 'Si us plau, indica la data des de la que obtenir els canvis.';
+$s_plugin_CustomerManagement_notification_to_date_required = 'Si us plau, indica la data fins la que obtenir els canvis.';
+$s_plugin_CustomerManagement_notification_from_date_must_be_before_end_date = 'La data inicial ha de ser anterior a la final.';
+$s_plugin_CustomerManagement_unspecified_error = 'S\'ha produït un error no especificat. Si us plau, contacta amb l'administrador.';
+
+$s_plugin_CustomerManagement_email_notification_title = 'Informe d\'actividad per %s entre %s i %s';
+$s_plugin_CustomerManagement_email_notification_bug_header = 'Incidència %s : %s | %s | Estat: %s';
+$s_plugin_CustomerManagement_email_notification_bug_reported_by = 'Informat per %s <%s>';
+$s_plugin_CustomerManagement_email_notification_bug_description = 'Descripció: %s';
